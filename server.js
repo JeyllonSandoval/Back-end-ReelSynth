@@ -12,6 +12,10 @@ const peliculas = [
     {
       titulo: "Pelicula 3",
       descripcion: "Descripción de la Película 3"
+    },
+    {
+      titulo: "Pelicula 4",
+      descripcion: "Descripción de la Película 4"
     }
   ];
 
