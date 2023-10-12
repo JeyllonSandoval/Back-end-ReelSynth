@@ -1,38 +1,17 @@
-const pelicula = {
-    titulo: "UNCHARTED",
-    descripcion: "pelicula de aventura sobre caza de tesoros",
-    categoria: ["accion", "aventura", "terror"]
-}
+import { ApolloServer, gql } from "apollo-server"
 
-// import {titulo, descripcion} from "./models/pelicula"
+import typeDefs from "./Schemas/index.js"
+import resolvers from "./Resolvers/index.js"
+import {connectDB} from "./db.js"
+import dotenv from 'dotenv';
+dotenv.config( { path: './.env' } );
+// Crea una instancia de Apollo Server
+const server = new ApolloServer({ typeDefs, resolvers });
 
-//const {edad} = persona
+connectDB()
 
-// peliculas.find((pelicula)=>{
-//     return pelicula.id == 103
-// })
-// presentar(pelicula)
 
-const like = 20
-const autor = "Jose"
-
-const newPelicula = {
-    ...pelicula,
-    like,
-    autor
-}
-
-function presentar({titulo, categoria, like}){ 
-    console.log(titulo, categoria[1], like || "")
-}
-presentar(newPelicula)
-
-// console.log(newPelicula)
-
-// console.log(edad)
-
-// const numeros = [1,2,3,4,5,6]
-
-// const [,,tres] = numeros
-
-// console.log(tres)
+// Inicia el servidor
+server.listen().then(({ url }) => {
+  console.log(`Servidor GraphQL listo en ${url}`);
+});

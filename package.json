@@ -6,15 +6,19 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js"
+    "dev": "nodemon index.js --watch index.js"
   },
   "keywords": [],
   "author": "Joan Corona & Jeyllon Sandoval",
   "license": "ISC",
   "dependencies": {
-    "apollo-server": "^3.12.1",
-    "graphql": "^16.8.1",
-    "mongoose": "^7.6.1",
-    "nodemon": "^3.0.1"
+    "apollo-server": "3.12.1",
+    "bcryptjs": "2.4.3",
+    "dotenv": "16.3.1",
+    "graphql": "16.8.1",
+    "graphql-tools": "9.0.0",
+    "jsonwebtoken": "9.0.2",
+    "mongoose": "7.6.1",
+    "nodemon": "3.0.1"
   }
 }
