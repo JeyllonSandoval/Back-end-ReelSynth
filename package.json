@@ -1,0 +1,20 @@
+{
+  "name": "proyecto-ing.software",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [],
+  "author": "Joan Corona & Jeyllon Sandoval",
+  "license": "ISC",
+  "dependencies": {
+    "apollo-server": "^3.12.1",
+    "graphql": "^16.8.1",
+    "mongoose": "^7.6.1",
+    "nodemon": "^3.0.1"
+  }
+}
