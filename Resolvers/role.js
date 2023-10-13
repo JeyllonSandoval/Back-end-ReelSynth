@@ -27,9 +27,20 @@ const createRole = async (_, { input }) => {
         console.log(error)
         throw new Error("Error al crear el rol")
     }
-    
 }
 
+const updateRole = async (_, { id,input }) => {
+    try {
+        console.log(id, input)
+        if(!id) throw new Error("No se ha enviado un ID")
+        const role = await Role.findByIdAndUpdate(id, input, {new: true})
+        if(!role) throw new Error("No se ha encontrado el rol")
+        return role
+    } catch (error) {
+        console.log(error)
+        throw new Error("Error al actualizar el rol")
+    }
+}
 
   export const roleResolvers = {
     Query: {
@@ -37,6 +48,7 @@ const createRole = async (_, { input }) => {
         getRole
     },
     Mutation: {
-        createRole
+        createRole,
+        updateRole
     }
 }
