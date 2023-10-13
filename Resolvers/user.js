@@ -38,12 +38,26 @@ const createUser = async (_, { input }) => {
 }
 
 
+const updateUser = async (_, { id, input }) => {
+    try{
+        if(!id) throw new Error("No se ha enviado un ID")
+        const user = await User.findByIdAndUpdate(id, input, {new: true}).populate("role")
+        if(!user) throw new Error("No se ha encontrado el Usuario")
+        return user
+    }catch(error){
+        console.log(error)
+        throw new Error("Error al actualizar el usuario")
+    }
+}
+
+
   export const userResolvers = {
     Query: {
         getUsers,
         getUser
     },
     Mutation: {
-        createUser
+        createUser,
+        updateUser
     }
 }
