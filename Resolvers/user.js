@@ -3,16 +3,18 @@ import User from "../Models/User.js"
 
 // Querys
 const getUsers = async (_, { input }) => {
-    const Users = await User.find()
+    const Users = await User.find().populate("role")
+    console.log(Users)
     if(!input) return Users
     return Users.filter( (User) => User.name.toUpperCase().includes(input.name.toUpperCase()) ||  User.description.includes(input.description) || User.id === input.id )
   }
   
-const getUser = async (_, { id }) => { 
+const getUser = async (_, {id}) => { 
     if(!id) throw new Error("No se ha enviado un ID")
-    const User = await User.findById(id)
-    if(!User) throw new Error("No se ha encontrado el Usuario")
-    return User 
+    const user = await User.findById(id).populate("role")
+
+    if(!user) throw new Error("No se ha encontrado el Usuario")
+    return user 
   }
 
 
@@ -23,7 +25,7 @@ const createUser = async (_, { input }) => {
         if(!input.password) throw new Error("No se ha enviado una contraseña")
         if(!input.email) throw new Error("No se ha enviado un email")
         if(!input.role) throw new Error("No se ha enviado un rol")
-        
+
         input.password = await User.encryptPassword(input.password)
         const newUser = new User(input)
         await newUser.save()
