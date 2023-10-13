@@ -29,7 +29,7 @@ const createUser = async (_, { input }) => {
         input.password = await User.encryptPassword(input.password)
         const newUser = new User(input)
         await newUser.save()
-        return newUser
+        return await newUser.populate("role")
     } catch (error) {
         console.log(error)
         throw new Error("Error al crear el usuario")

@@ -19,7 +19,8 @@ const getRole = async (_, { id }) => {
 // Mutations
 const createRole = async (_, { input }) => {
     try {
-        const newRole = new Role(input)
+        const {name, description} = input
+        const newRole = new Role({name,description})
         await newRole.save()
         return newRole
     } catch (error) {
