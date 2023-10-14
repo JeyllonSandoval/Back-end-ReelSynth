@@ -31,7 +31,12 @@ const movieSchema = new Schema({
     user: {
         ref: 'User',
         type: Schema.Types.ObjectId        
-    }
+    },
+    genrers: [{
+        ref: "Genrer",
+        type: Schema.Types.ObjectId
+
+    }]
 },
     {
         timestamps: true,

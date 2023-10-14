@@ -6,6 +6,8 @@ type Movie {
     year: Int
     rating: Float
     imgURL: String
+    user: User
+    genrer: Genrer
     status: String
 }
 

@@ -1,26 +1,28 @@
 import Movie from "../Models/Movie.js"
+import { verifyToken } from "../utils/Token.js"
+import { verifyAdmin } from "../utils/auth.js"
 
 // Querys
 const getMovies = async (_, { input }) => {
-    const Movies = await Movie.find()
-    if(!input) return Movies
-    return Movies.filter( (movie) => movie.title.toUpperCase().includes(input.title.toUpperCase()) ||  movie.description.includes(input.description) || movie.year.includes(input.year)
-    ||movie.rating.includes(input.rating) || movie.imgURL.includes(input.imgURL) || movie.user.includes(input.user) || movie.id === input.id )
-  }
-  
+    const Movies = await Movie.find().populate("User")
+    return Movies
+    }
+
 const getMovie = async (_, { id }) => { 
     if(!id) throw new Error("No se ha enviado un ID")
-    const movie = await Role.findById(id)
+    const movie = await Role.findById(id).populate("User")
     if(!movie) throw new Error("No se ha encontrado la movie")
     return movie
-  }
+    }
 
 
 // Mutations
-const createMovie = async (_, { input }) => {
+const createMovie = async (_, { input }, {token}) => {
     try {
-        const {title, description, year, rating, imgURL, user} = input
-        const newMovie = new Movie({title, description, year, rating, imgURL, user})
+        const userToken = verifyToken(token)
+        verifyAdmin(userToken) 
+        const {title, description, year, rating, imgURL} = input
+        const newMovie = new Movie({title, description, year, rating, imgURL, user:userToken.id, genrers}).populate("User")
         await newMovie.save()
         return newMovie
     } catch (error) {
@@ -29,11 +31,13 @@ const createMovie = async (_, { input }) => {
     }
 }
 
-const updateMovie = async (_, { id,input }) => {
+const updateMovie = async (_, { id,input}, {token}) => {
     try {
         //console.log(id, input)
+        const userToken = verifyToken(token)
+        verifyAdmin(userToken) 
         if(!id) throw new Error("No se ha enviado un ID")
-        const movie = await Movie.findByIdAndUpdate(id, input, {new: true})
+        const movie = await Movie.findByIdAndUpdate(id, input, {new: true}).populate("User")
         if(!movie) throw new Error("No se ha encontrado la Movie")
         return movie
     } catch (error) {
