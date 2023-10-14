@@ -5,6 +5,7 @@ type Movie {
     description: String
     year: Int
     rating: Float
+    imgURL: String
     status: String
 }
 
@@ -14,6 +15,7 @@ input inputMovie {
     description: String
     year: Int
     rating: Float
+    imgURL: String
     status: String
 }
 
