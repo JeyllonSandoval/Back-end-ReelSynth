@@ -7,6 +7,10 @@ const countrySchema = new Schema({
         required: true,
         trim: true
     },
+    status: {
+        type: String,
+        default: 'ACTIVE'
+    },
 },
     {
         timestamps: true,
