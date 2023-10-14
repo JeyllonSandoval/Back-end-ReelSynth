@@ -13,6 +13,10 @@ type User{
     updatedAt: String
 }
 
+type Token{
+    token: String
+}
+
 input UserInput{
     id: ID
     userName: String
@@ -30,6 +34,8 @@ type Query{
 }
 
 type Mutation{
+    login(input: UserInput!): Token
+    singup(input: UserInput): User
     createUser(input: UserInput!): User
     updateUser(id: ID!, input: UserInput): User
     deleteUser(id: ID!): User

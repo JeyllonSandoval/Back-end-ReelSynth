@@ -6,7 +6,10 @@ import {connectDB} from "./db.js"
 import dotenv from 'dotenv';
 dotenv.config( { path: './.env' } );
 // Crea una instancia de Apollo Server
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({ typeDefs, resolvers, context: ({ req }) => {
+  const token = req.headers['x-token'] || '';
+  return { req, token };
+}});
 
 connectDB()
 

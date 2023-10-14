@@ -1,12 +1,12 @@
 
 import User from "../Models/User.js"
-
+import { createToken, verifyToken } from "../utils/Token.js"
+import { verifyAdmin } from "../utils/auth.js"
 // Querys
 const getUsers = async (_, { input }) => {
     const Users = await User.find().populate("role")
-    console.log(Users)
     if(!input) return Users
-    return Users.filter( (User) => User.name.toUpperCase().includes(input.name.toUpperCase()) ||  User.description.includes(input.description) || User.id === input.id )
+    return Users.filter( (User) => User.firstName.includes(input.firstName) ||  User.email.includes(input.email) || User.id === input.id )
   }
   
 const getUser = async (_, {id}) => { 
@@ -17,14 +17,31 @@ const getUser = async (_, {id}) => {
     return user 
   }
 
+const login = async (_, {input}) => { 
+    console.log(input);
+    const {userName, password, email} = input
+    if(!userName && !email) throw new Error("No se ha enviado un nombre de usuario o email")
+    if(!password) throw new Error("No se ha enviado una contraseña")
+
+    const userFound = await User.findOne({ $or: [{ userName: userName }, { email: email }] }).populate('role')
+    console.log(userFound);
+    if(!userFound) throw new Error("Usuario/Email o contraseña incorrectos")
+    
+    const matchPassword = await User.comparePassword(password, userFound.password)
+    if(!matchPassword) throw new Error("Usuario/Email o contraseña incorrectos")
+
+    const token = createToken(userFound)
+    return { token }
+}
 
 // Mutations
-const createUser = async (_, { input }) => {
+const createUser = async (_, { input }, {token}) => {
     try {
-        if(!input.userName) throw new Error("No se ha enviado un nombre de usuario")
-        if(!input.password) throw new Error("No se ha enviado una contraseña")
-        if(!input.email) throw new Error("No se ha enviado un email")
-        if(!input.role) throw new Error("No se ha enviado un rol")
+        const userToken = verifyToken(token)
+        verifyAdmin(userToken) 
+        console.log(userToken);
+        if(!input.userName || !input.password || !input.email || !input.role) 
+            throw new Error("No se ha enviado todos los datos");
 
         input.password = await User.encryptPassword(input.password)
         const newUser = new User(input)
@@ -32,21 +49,25 @@ const createUser = async (_, { input }) => {
         return await newUser.populate("role")
     } catch (error) {
         console.log(error)
-        throw new Error("Error al crear el usuario")
+        if(error.code === 11000) throw new Error("El nombre de usuario o email ya existe")
+        throw new Error(error)
     }
     
 }
 
 
-const updateUser = async (_, { id, input }) => {
+const updateUser = async (_, { id, input }, {token}) => {
     try{
+        const userToken = verifyToken(token)
+        verifyAdmin(userToken);
+        console.log(userToken);
         if(!id) throw new Error("No se ha enviado un ID")
         const user = await User.findByIdAndUpdate(id, input, {new: true}).populate("role")
         if(!user) throw new Error("No se ha encontrado el Usuario")
         return user
     }catch(error){
         console.log(error)
-        throw new Error("Error al actualizar el usuario")
+        throw new Error(error)
     }
 }
 
@@ -58,6 +79,7 @@ const updateUser = async (_, { id, input }) => {
     },
     Mutation: {
         createUser,
-        updateUser
+        updateUser,
+        login
     }
 }
