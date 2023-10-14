@@ -10,7 +10,12 @@ const roleSchema = new Schema({
     description: {
         type: String,
         trim: true
-    }
+    },
+    status: {
+        type: String,
+        required: false,
+        default: 'ACTIVE'
+    },
 },
     {
         timestamps: true,
