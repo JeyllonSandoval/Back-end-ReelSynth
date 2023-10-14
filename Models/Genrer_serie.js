@@ -1,14 +1,14 @@
 import {Schema, model} from 'mongoose'
 
 const genrer_serieSchema = new Schema({
-    serie: {
+    serie: [{
         type: Schema.Types.ObjectId,
         ref: 'Serie'
-    },
-    genrer: {
+    }],
+    genrer: [{
         type: Schema.Types.ObjectId,
         ref: 'Genrer'
-    },
+    }],
     status: {
         type: String,
         default: 'ACTIVE'

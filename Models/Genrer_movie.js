@@ -1,14 +1,14 @@
 import {Schema, model} from 'mongoose'
 
 const genrer_movieSchema = new Schema({
-    genrer: {
+    genrer:[{
         type: Schema.Types.ObjectId,
         ref: 'Genrer'
-    },
-    movie: {
+    }],
+    movie: [{
         type: Schema.Types.ObjectId,
         ref: 'Movie'
-    },    
+    }],    
     status: {
         type: String,
         default: 'ACTIVE'
