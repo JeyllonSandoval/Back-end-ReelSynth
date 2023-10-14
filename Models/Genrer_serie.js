@@ -1,21 +1,13 @@
 import {Schema, model} from 'mongoose'
 
-const rateSchema = new Schema({
-    user: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
-    },
+const genrer_serieSchema = new Schema({
     serie: {
         type: Schema.Types.ObjectId,
         ref: 'Serie'
     },
-    movie: {
+    genrer: {
         type: Schema.Types.ObjectId,
-        ref: 'Movie'
-    },
-    rate: {
-        type: Number,
-        required: false
+        ref: 'Genrer'
     },
     status: {
         type: String,
@@ -28,4 +20,4 @@ const rateSchema = new Schema({
 })
 
 
-export default model('Rate',rateSchema);
+export default model('Genrer_serie',genrer_serieSchema);

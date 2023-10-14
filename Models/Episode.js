@@ -1,6 +1,6 @@
 import {Schema, model} from 'mongoose'
 
-const movieSchema = new Schema({
+const episodeSchema = new Schema({
     title: {
         type: String,
         unique: true,
@@ -9,29 +9,26 @@ const movieSchema = new Schema({
     },
     description: {
         type: String,
-        trim: false
+        require: true,
+        trim: true
     },
     year: {
-        type: Number,
-        required: false
+        type: String,
+        require: true,
+        trim: true
     },
     rating: {
         type: Number,
-        required: false
+        trim: false
     },
-    imgURL: {
-        type: String,
-        required: false
+    season: {
+        ref: "Season",
+        type: Schema.Types.ObjectId
     },
     status: {
         type: String,
-        required: false,
         default: 'ACTIVE'
     },
-    user: {
-        ref: 'User',
-        type: Schema.Types.ObjectId        
-    }
 },
     {
         timestamps: true,
@@ -39,4 +36,4 @@ const movieSchema = new Schema({
 })
 
 
-export default model('Movie',movieSchema);
+export default model('Episode',episodeSchema);
