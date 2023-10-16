@@ -55,7 +55,6 @@ const createUser = async (_, { input }, {token}) => {
     
 }
 
-
 const updateUser = async (_, { id, input }, {token}) => {
     try{
         const userToken = verifyToken(token)

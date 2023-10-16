@@ -35,7 +35,6 @@ const movieSchema = new Schema({
     genrers: [{
         ref: "Genrer",
         type: Schema.Types.ObjectId
-
     }]
 },
     {

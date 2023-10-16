@@ -7,18 +7,19 @@ type Movie {
     rating: Float
     imgURL: String
     user: User
-    genrer: Genrer
+    genrers: [Genrer]
     status: String
 }
 
 input inputMovie {
-    id: ID
     title: String
     description: String
     year: Int
     rating: Float
     imgURL: String
     status: String
+    genrers: [ID]
+    user: ID
 }
 
 type Query {
