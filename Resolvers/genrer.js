@@ -22,9 +22,9 @@ const createGenrer = async (_, { input }, {token}) => {
     try {
         const userToken = verifyToken(token)
         verifyAdmin(userToken) 
-        const newGenrer = new Genrer(input)
+        const newGenrer = new Genrer(input) 
         await newGenrer.save()
-        return await newGenrer
+        return newGenrer
     } catch (error) {
         console.log(error)
         throw new Error("Error al crear la Genrer")

@@ -13,6 +13,7 @@ const server = new ApolloServer({ typeDefs, resolvers, context: ({ req }) => {
 
 connectDB()
 
+
 // Inicia el servidor
 server.listen().then(({ url }) => {
   console.log(`Servidor GraphQL listo en ${url}`);

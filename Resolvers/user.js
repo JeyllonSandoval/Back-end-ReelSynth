@@ -1,12 +1,13 @@
-
+import { filter } from "../helpers/Filter.js"
 import User from "../Models/User.js"
 import { createToken, verifyToken } from "../utils/Token.js"
 import { verifyAdmin } from "../utils/auth.js"
 // Querys
 const getUsers = async (_, { input }) => {
-    const Users = await User.find().populate("role")
-    if(!input) return Users
-    return Users.filter( (User) => User.firstName.includes(input.firstName) ||  User.email.includes(input.email) || User.id === input.id )
+    const query = filter(input)
+    const Users = await User.find(query).populate("role")
+
+    return Users
   }
   
 const getUser = async (_, {id}) => { 
@@ -34,7 +35,7 @@ const login = async (_, {input}) => {
     return { token }
 }
 
-// Mutations
+
 const createUser = async (_, { input }, {token}) => {
     try {
         const userToken = verifyToken(token)
