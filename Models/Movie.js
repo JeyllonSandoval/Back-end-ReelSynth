@@ -9,7 +9,7 @@ const movieSchema = new Schema({
     },
     description: {
         type: String,
-        trim: false
+        trim: true
     },
     year: {
         type: Number,
@@ -31,6 +31,10 @@ const movieSchema = new Schema({
     user: {
         ref: 'User',
         type: Schema.Types.ObjectId        
+    },
+    studio: {
+        ref: "Studio",
+        type: Schema.Types.ObjectId
     },
     genrers: [{
         ref: "Genrer",

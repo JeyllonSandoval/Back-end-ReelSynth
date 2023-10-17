@@ -13,7 +13,7 @@ const getMovies = async (_, { input }, ctx,{fieldNodes} ) => {
         query = filter(input)
       }
       
-
+/*
       const shouldPopulateUser = fieldNodes.some(node =>
           node.selectionSet.selections.some(
             selection => selection.name.value === 'user'
@@ -25,6 +25,13 @@ const getMovies = async (_, { input }, ctx,{fieldNodes} ) => {
             selection => selection.name.value === 'genrers'
           )
         );
+
+        const shouldPopulateStudios = fieldNodes.some(node =>
+          node.selectionSet.selections.some(
+            selection => selection.name.value === 'studios'
+          )
+        );
+
       let movies = []
       if(shouldPopulateUser && shouldPopulateGenrers){
         movies = await Movie.find(query).populate({
@@ -46,7 +53,14 @@ const getMovies = async (_, { input }, ctx,{fieldNodes} ) => {
       }else{
         movies = await Movie.find(query)
       }
-    
+    */
+
+      const movies = await Movie.find(query).populate({
+        path: 'user',
+        populate: {
+          path: 'role'
+        }
+      }).populate("genrers").populate("studio")
     return movies
     }
 
@@ -58,7 +72,7 @@ const getMovie = async (_, { id }) => {
       populate: {
         path: 'role'
       }
-    }).populate("genrers")
+    }).populate("genrers").populate("studio")
 
     if(!movie) throw new Error("No se ha encontrado la movie")
     return movie

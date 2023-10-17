@@ -12,8 +12,7 @@ const serieSchema = new Schema({
         trim: true
     },
     rating: {
-        type: Number,
-        trim: false
+        type: Number
     },
     status: {
         type: String,

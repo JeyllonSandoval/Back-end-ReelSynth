@@ -1,0 +1,24 @@
+
+type Studio {
+    id: ID!
+    name: String!
+    description: String
+    status: String
+}
+
+input inputStudio {
+    name: String!
+    description: String
+    status: String
+}
+
+type Query {
+    getStudios(input: inputStudio): [Studio]
+    getStudio(id: ID!): Studio
+}
+
+type Mutation {
+    createStudio(input: inputStudio): Studio
+    updateStudio(id: ID!, input: inputStudio): Studio
+    deleteStudio(id: ID!): Studio
+}

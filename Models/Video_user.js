@@ -10,12 +10,10 @@ const video_userSchema = new Schema({
         type: Schema.Types.ObjectId
     },
     like: {
-        type: Number,
-        trim: false
+        type: Number
     },
     time: {
-        type: Number,
-        trim: true
+        type: Number
     },
     status: {
         type: String,

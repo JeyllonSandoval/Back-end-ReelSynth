@@ -14,12 +14,10 @@ const episodeSchema = new Schema({
     },
     year: {
         type: String,
-        require: true,
-        trim: true
+        require: true
     },
     rating: {
-        type: Number,
-        trim: false
+        type: Number
     },
     season: {
         ref: "Season",
