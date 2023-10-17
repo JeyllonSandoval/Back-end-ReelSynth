@@ -10,5 +10,11 @@ const genrerSchema = fs.readFileSync("./Schemas/genrer.graphql", "utf8");
 const movieSchema = fs.readFileSync("./Schemas/movie.graphql", "utf8");
 const studioSchema = fs.readFileSync("./Schemas/studio.graphql", "utf8");
 // Unimos todos los Schemas en uno solo
-const typeDefs = mergeTypeDefs([roleSchema, genrerSchema , userSchema, movieSchema])
+const typeDefs = mergeTypeDefs([
+    roleSchema, 
+    genrerSchema, 
+    studioSchema, 
+    userSchema, 
+    movieSchema
+])
 export default typeDefs;
