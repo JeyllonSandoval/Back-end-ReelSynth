@@ -46,7 +46,7 @@ const updateProducer = async (_, { id,input}, {token}) => {
     }
 }
 
-  export const ProducerResolvers = {
+  export const producerResolvers = {
     Query: {
         getProducers,
         getProducer

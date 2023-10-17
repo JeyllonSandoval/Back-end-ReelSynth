@@ -8,9 +8,10 @@ const getMovies = async (_, { input }, ctx,{fieldNodes} ) => {
       let query = {}
       // controlar si se envia un titulo o un genero
       
+      const {producer, ...input2} = input
       if(input)
       {
-        query = filter(input)
+        query = filter(input2)
       }
 
        const movies = await Movie.find(query).populate({
@@ -24,6 +25,10 @@ const getMovies = async (_, { input }, ctx,{fieldNodes} ) => {
           path: 'producer'
         }
       })
+
+      if(producer){
+        return movies.filter(movie => movie.studio.producer.id == producer)
+      }
       return movies
       
 /*

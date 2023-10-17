@@ -1,13 +1,11 @@
 export const filter = (input) => {
-
+    if(!input) return {}
     let query = {}
-
+    
     Object.keys(input).forEach((key) => {
         const value = input[key];
         console.log(`${key}: ${value}`)
-        if(key == "producer"){
-          query['studio.producer'] = { $eq: value };
-        }else{
+        
           if (typeof value === 'number') {
             query[key] = { $gte: value };
           } else if (Array.isArray(value)) {
@@ -19,7 +17,7 @@ export const filter = (input) => {
               query[key] = { $regex: `.*${value}.*`, $options: 'i' };
             }
           }
-        }
+        
         
       });
 
