@@ -49,7 +49,6 @@ const createUser = async (_, { input }, {token}) => {
         await newUser.save()
         return await newUser.populate("role")
     } catch (error) {
-        console.log(error)
         if(error.code === 11000) throw new Error("El nombre de usuario o email ya existe")
         throw new Error(error)
     }

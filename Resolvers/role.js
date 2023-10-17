@@ -25,7 +25,7 @@ const createRole = async (_, { input }) => {
         return newRole
     } catch (error) {
         console.log(error)
-        throw new Error("Error al crear el rol")
+        throw new Error("Error al crear el rol: "+error.message || error)
     }
 }
 
@@ -38,7 +38,7 @@ const updateRole = async (_, { id,input }) => {
         return role
     } catch (error) {
         console.log(error)
-        throw new Error("Error al actualizar el rol")
+        throw new Error("Error al actualizar el rol: "+error.message || error)
     }
 }
 

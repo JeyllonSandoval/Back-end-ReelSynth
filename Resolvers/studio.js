@@ -13,7 +13,7 @@ const getStudios = async (_, { input }) => {
 const getStudio = async (_, { id }) => { 
     if(!id) throw new Error("No se ha enviado un ID")
     const studio = await Studio.findById(id).populate("producer")
-    if(!studio) throw new Error("No se ha encontrado la Studio")
+    if(!studio) throw new Error("No se ha encontrado la Studio: "+error.message || error)
     return studio
     }
 
@@ -27,7 +27,7 @@ const createStudio = async (_, { input }, {token}) => {
         await newStudio.save()
         return await newStudio.populate("producer")
     } catch (error) {
-        throw new Error("Error al crear la Studio: "+error.message)
+        throw new Error("Error al crear la Studio: "+error.message || error)
     }
 }
 
@@ -42,7 +42,7 @@ const updateStudio = async (_, { id,input}, {token}) => {
         return studio
     } catch (error) {
         console.log(error)
-        throw new Error("Error al actualizar la Studio")
+        throw new Error("Error al actualizar la Studio: "+error.message || error)
     }
 }
 

@@ -27,7 +27,7 @@ const createProducer = async (_, { input }, {token}) => {
         await newProducer.save()
         return newProducer
     } catch (error) {
-        throw new Error("Error al crear la Producer: "+error.message)
+        throw new Error("Error al crear la Producer: "+error.message || error)
     }
 }
 
@@ -42,7 +42,7 @@ const updateProducer = async (_, { id,input}, {token}) => {
         return producer
     } catch (error) {
         console.log(error)
-        throw new Error("Error al actualizar la Producer")
+        throw new Error("Error al actualizar la Producer: "+error.message || error)
     }
 }
 

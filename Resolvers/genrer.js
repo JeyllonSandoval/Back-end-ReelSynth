@@ -27,7 +27,7 @@ const createGenrer = async (_, { input }, {token}) => {
         return newGenrer
     } catch (error) {
         console.log(error)
-        throw new Error("Error al crear la Genrer")
+        throw new Error("Error al crear la Genrer: "+error.message || error)
     }
 }
 
@@ -42,7 +42,7 @@ const updateGenrer = async (_, { id,input}, {token}) => {
         return genrer
     } catch (error) {
         console.log(error)
-        throw new Error("Error al actualizar la Genrer")
+        throw new Error("Error al actualizar la Genrer: "+error.message || error)
     }
 }
 

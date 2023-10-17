@@ -4,7 +4,7 @@ import { verifyAdmin } from "../utils/auth.js"
 import { filter } from "../helpers/Filter.js"
 
 // Querys
-const getMovies = async (_, { input }, ctx,{fieldNodes} ) => {
+const getMovies = async (_, { input } ) => {
       let query = {}
       // controlar si se envia un titulo o un genero
       
@@ -30,48 +30,6 @@ const getMovies = async (_, { input }, ctx,{fieldNodes} ) => {
         return movies.filter(movie => movie.studio.producer.id == producer)
       }
       return movies
-      
-/*
-      const shouldPopulateUser = fieldNodes.some(node =>
-          node.selectionSet.selections.some(
-            selection => selection.name.value === 'user'
-          )
-      );
-
-        const shouldPopulateGenrers = fieldNodes.some(node =>
-          node.selectionSet.selections.some(
-            selection => selection.name.value === 'genrers'
-          )
-        );
-
-        const shouldPopulateStudios = fieldNodes.some(node =>
-          node.selectionSet.selections.some(
-            selection => selection.name.value === 'studios'
-          )
-        );
-
-      let movies = []
-      if(shouldPopulateUser && shouldPopulateGenrers){
-        movies = await Movie.find(query).populate({
-          path: 'user',
-          populate: {
-            path: 'role'
-          }
-        }).populate("genrers")
-      }else if(shouldPopulateUser){
-        movies = await Movie.find(query).populate({
-          path: 'user',
-          populate: {
-            path: 'role'
-          }
-        });
-      }
-      else if(shouldPopulateGenrers){
-          movies = await Movie.find(query).populate("genrers")
-      }else{
-        movies = await Movie.find(query)
-      }
-    */
     }
 
 const getMovie = async (_, { id }) => { 
@@ -84,7 +42,7 @@ const getMovie = async (_, { id }) => {
       }
     }).populate("genrers").populate("studio")
 
-    if(!movie) throw new Error("No se ha encontrado la movie")
+    if(!movie) throw new Error("No se ha encontrado la movie: "+error.message || error)
     return movie
     }
 
@@ -106,7 +64,7 @@ const createMovie = async (_, { input }, {token}) => {
         
     } catch (error) {
         console.log(error)
-        throw new Error("Error al crear la Movie")
+        throw new Error("Error al crear la Movie: "+error.message || error)
     }
 }
 
@@ -123,7 +81,7 @@ const updateMovie = async (_, { id,input}, {token}) => {
         return movie
     } catch (error) {
         console.log(error)
-        throw new Error("Error al actualizar la Movie")
+        throw new Error("Error al actualizar la Movie: "+error.message || error)
     }
 }
 
