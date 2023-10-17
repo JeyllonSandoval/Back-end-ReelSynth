@@ -1,6 +1,6 @@
 import {Schema, model} from 'mongoose'
 
-const studioSchema = new Schema({
+const producerSchema = new Schema({
     name: {
         type: String,
         unique: true,
@@ -15,10 +15,6 @@ const studioSchema = new Schema({
         type: String,
         default: 'ACTIVE'
     },
-    producer: {
-        type: Schema.Types.ObjectId,
-        ref: 'Producer'
-    },
     imgURL: {
         type: String,
         trim: true
@@ -30,4 +26,4 @@ const studioSchema = new Schema({
 })
 
 
-export default model('Studio', studioSchema);
+export default model('Producer', producerSchema);

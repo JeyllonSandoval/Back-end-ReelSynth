@@ -2,12 +2,13 @@
 import Studio from "../Models/Studio.js"
 import { verifyToken } from "../utils/Token.js"
 import { verifyAdmin } from "../utils/auth.js"
-
+import { filter } from "../helpers/Filter.js"
 // Querys
 const getStudios = async (_, { input }) => {
-    const studios = await Studio.find()
+    const query = filter(input)
+    const studios = await Studio.find(query)
     return studios
-    }
+}
 
 const getStudio = async (_, { id }) => { 
     if(!id) throw new Error("No se ha enviado un ID")

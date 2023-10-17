@@ -12,6 +12,19 @@ const getMovies = async (_, { input }, ctx,{fieldNodes} ) => {
       {
         query = filter(input)
       }
+
+       const movies = await Movie.find(query).populate({
+        path: 'user',
+        populate: {
+          path: 'role'
+        }
+      }).populate("genrers").populate({
+        path: 'studio',
+        populate: {
+          path: 'producer'
+        }
+      })
+      return movies
       
 /*
       const shouldPopulateUser = fieldNodes.some(node =>
@@ -54,14 +67,6 @@ const getMovies = async (_, { input }, ctx,{fieldNodes} ) => {
         movies = await Movie.find(query)
       }
     */
-
-      const movies = await Movie.find(query).populate({
-        path: 'user',
-        populate: {
-          path: 'role'
-        }
-      }).populate("genrers").populate("studio")
-    return movies
     }
 
 const getMovie = async (_, { id }) => { 

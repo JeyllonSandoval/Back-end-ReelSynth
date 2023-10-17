@@ -3,12 +3,16 @@ type Studio {
     id: ID!
     name: String!
     description: String
+    imgURL: String
+    producer: Producer
     status: String
 }
 
 input inputStudio {
     name: String!
     description: String
+    imgURL: String
+    producer: ID
     status: String
 }
 
