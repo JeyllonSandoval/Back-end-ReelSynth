@@ -45,7 +45,7 @@ const updateStudio = async (_, { id,input}, {token}) => {
     }
 }
 
-  export const StudioResolvers = {
+  export const studioResolvers = {
     Query: {
         getStudios,
         getStudio
