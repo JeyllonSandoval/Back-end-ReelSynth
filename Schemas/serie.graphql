@@ -6,7 +6,7 @@ type Serie {
     rating: Float
     studio: Studio
     user: User
-    genrers: [Genre]
+    genrers: [Genrer]
     seasons: Int
     status: String
 }

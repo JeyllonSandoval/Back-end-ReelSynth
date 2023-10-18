@@ -59,9 +59,9 @@ const updateUser = async (_, { id, input }, {token}) => {
     try{
         const userToken = verifyToken(token)
         verifyAdmin(userToken);
-        console.log(userToken);
         if(!id) throw new Error("No se ha enviado un ID")
-        const user = await User.findByIdAndUpdate(id, input, {new: true}).populate("role").populate("country")
+        if(input.password) input.password = await User.encryptPassword(input.password)
+        const user = await User.findByIdAndUpdate(id, input, {new: true}).populate("role country")
         if(!user) throw new Error("No se ha encontrado el Usuario")
         return user
     }catch(error){

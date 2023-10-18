@@ -25,8 +25,7 @@ const createCountry = async (_, { input }, { token }) => {
     try {
         const userToken = verifyToken(token)
         verifyAdmin(userToken)
-        const {name, description} = input
-        const newCountry = new Country({name,description})
+        const newCountry = new Country(input)
         await newCountry.save()
         return newCountry
     } catch (error) {

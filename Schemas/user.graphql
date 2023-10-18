@@ -17,6 +17,11 @@ type User{
 type Token{
     token: String
 }
+input LoginInput{
+    userName: String
+    email: String
+    password: String!
+}
 
 input UserInput{
     id: ID
@@ -36,7 +41,7 @@ type Query{
 }
 
 type Mutation{
-    login(input: UserInput!): Token
+    login(input: LoginInput!): Token
     singup(input: UserInput): User
     createUser(input: UserInput!): User
     updateUser(id: ID!, input: UserInput): User

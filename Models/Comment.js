@@ -1,13 +1,13 @@
 import {Schema, model} from 'mongoose'
 
-const commentSchema = new mongoose.Schema({
+const commentSchema = new Schema({
     content: {
         type: String,
         required: true
     },
-    series: {
+    serie: {
         type: Schema.Types.ObjectId,
-        ref: 'Series'
+        ref: 'Serie'
     },
     season: {
         type: Schema.Types.ObjectId,
@@ -21,7 +21,7 @@ const commentSchema = new mongoose.Schema({
         type: Schema.Types.ObjectId,
         ref: 'Movie'
     },
-    parentComment: {
+    parent: {
         type: Schema.Types.ObjectId,
         ref: 'Comment',
         default: null

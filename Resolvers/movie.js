@@ -7,7 +7,7 @@ import { filter } from "../helpers/Filter.js"
 const getMovies = async (_, { input } ) => {
       
       // controlar si se envia un titulo o un genero
-      
+      if(!input) input = {}
       const {producer, ...input2} = input
       
       const query = filter(input2)
