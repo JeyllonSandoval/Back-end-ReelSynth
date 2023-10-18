@@ -8,7 +8,8 @@ const seasonSchema = new Schema({
         trim: true
     },
     number: {
-        type: Number
+        type: Number,
+        default: 1
     },
     description: {
         type: String,

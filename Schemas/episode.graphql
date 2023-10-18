@@ -1,0 +1,30 @@
+
+type Episode {
+    id: ID!
+    title: String!
+    description: String
+    year: Int
+    rating: Float
+    season: Season
+    status: String
+}
+
+input inputEpisode {
+    title: String
+    description: String
+    year: Int
+    rating: Float
+    season: ID
+    status: String
+}
+
+type Query {
+    getEpisodes(input: inputEpisode): [Episode]
+    getEpisode(id: ID!): Episode
+}
+
+type Mutation {
+    createEpisode(input: inputEpisode): Episode
+    updateEpisode(id: ID!, input: inputEpisode): Episode
+    deleteEpisode(id: ID!): Episode
+}

@@ -15,11 +15,10 @@ export const createToken = (user) => {
     const token = jwt.sign(payload, process.env.SECRET_KEY, {
       expiresIn: "1d",
     });
-    console.log(token);
     return token;
   } catch (error) {
     console.log(error);
-    throw new Error("Error al crear el token");
+    throw new Error("Error al crear el token: "+error.message || error);
   }
 }
 

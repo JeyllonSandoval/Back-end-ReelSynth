@@ -1,0 +1,28 @@
+
+type Season {
+    id: ID!
+    name: String!
+    description: String
+    number: Int
+    serie: Serie
+    status: String
+}
+
+input inputSeason {
+    name: String
+    description: String
+    number: Int
+    serie: ID
+    status: String
+}
+
+type Query {
+    getSeasons(input: inputSeason): [Season]
+    getSeason(id: ID!): Season
+}
+
+type Mutation {
+    createSeason(input: inputSeason): Season
+    updateSeason(id: ID!, input: inputSeason): Season
+    deleteSeason(id: ID!): Season
+}

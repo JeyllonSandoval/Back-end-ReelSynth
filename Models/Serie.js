@@ -14,6 +14,22 @@ const serieSchema = new Schema({
     rating: {
         type: Number
     },
+    seasons: {
+        type: Number,
+        default: 0
+    },
+    studio: {
+        type: Schema.Types.ObjectId,
+        ref: 'Studio'
+    },
+    genrers: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Genrer'
+    }],
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    },
     status: {
         type: String,
         default: 'ACTIVE'

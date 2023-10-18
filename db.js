@@ -4,7 +4,6 @@ import {connect} from 'mongoose';
 
 export const connectDB = async () => {
     try {
-        console.log(process.env.MONGO_URL)
         await connect(process.env.MONGO_URL, {
             useNewUrlParser: true,
             useUnifiedTopology: true

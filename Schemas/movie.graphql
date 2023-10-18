@@ -6,6 +6,7 @@ type Movie {
     year: Int
     rating: Float
     imgURL: String
+    duration: Int
     user: User
     studio: Studio
     genrers: [Genrer]
@@ -18,6 +19,7 @@ input inputMovie {
     year: Int
     rating: Float
     imgURL: String
+    duration: Int
     status: String
     studio: ID
     genrers: [ID]

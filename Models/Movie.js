@@ -28,6 +28,11 @@ const movieSchema = new Schema({
         required: false,
         default: 'ACTIVE'
     },
+    duration: {
+        type: Number,
+        required: false,
+        default: 0
+    },
     user: {
         ref: 'User',
         type: Schema.Types.ObjectId        

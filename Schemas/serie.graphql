@@ -1,0 +1,35 @@
+
+type Serie {
+    id: ID!
+    title: String!
+    description: String
+    rating: Float
+    studio: Studio
+    user: User
+    genrers: [Genre]
+    seasons: Int
+    status: String
+}
+
+input inputSerie {
+    title: String
+    description: String
+    rating: Float
+    studio: ID
+    status: String
+    seasons: Int
+    genrers: [ID]
+    producer: ID
+    user: ID
+}
+
+type Query {
+    getSeries(input: inputSerie): [Serie]
+    getSerie(id: ID!): Serie
+}
+
+type Mutation {
+    createSerie(input: inputSerie): Serie
+    updateSerie(id: ID!, input: inputSerie): Serie
+    deleteSerie(id: ID!): Serie
+}

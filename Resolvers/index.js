@@ -5,14 +5,22 @@ import { movieResolvers } from "./movie.js";
 import { genrerResolvers } from "./genrer.js";	
 import { studioResolvers } from "./studio.js";
 import { producerResolvers } from "./producer.js";
+import { serieResolvers } from "./serie.js";
+import { episodeResolvers } from "./episode.js";
+import { seasonResolvers } from "./season.js";
+import { hostResolvers } from "./host.js";
 // Unimos todos los resolvers
 const resolvers = mergeResolvers([ 
     roleResolvers, 
-    genrerResolvers, 
+    genrerResolvers,
+    hostResolvers, 
     producerResolvers,
     studioResolvers, 
     userResolvers, 
-    movieResolvers 
+    movieResolvers,
+    serieResolvers,
+    seasonResolvers,
+    episodeResolvers
 ]);
 // Exportamos los resolvers ya unidos
 export default resolvers;
