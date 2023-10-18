@@ -7,6 +7,11 @@ const countrySchema = new Schema({
         required: true,
         trim: true
     },
+    lenguage: {
+        type: String,
+        required: true,
+        trim: true
+    },
     status: {
         type: String,
         default: 'ACTIVE'

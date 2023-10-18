@@ -1,11 +1,13 @@
 
 import Role from "../Models/Role.js"
+import { filter } from "../helpers/Filter.js"
 
 // Querys
 const getRoles = async (_, { input }) => {
-    const Roles = await Role.find()
-    if(!input) return Roles
-    return Roles.filter( (role) => role.name.toUpperCase().includes(input.name.toUpperCase()) ||  role.description.includes(input.description) || role.id === input.id )
+    const query = filter(input)
+    const Roles = await Role.find(query)
+
+    return Roles
   }
   
 const getRole = async (_, { id }) => { 
@@ -17,8 +19,10 @@ const getRole = async (_, { id }) => {
 
 
 // Mutations
-const createRole = async (_, { input }) => {
+const createRole = async (_, { input }, { token }) => {
     try {
+        const userToken = verifyToken(token)
+        verifyAdmin(userToken)
         const {name, description} = input
         const newRole = new Role({name,description})
         await newRole.save()
@@ -29,9 +33,10 @@ const createRole = async (_, { input }) => {
     }
 }
 
-const updateRole = async (_, { id,input }) => {
+const updateRole = async (_, { id,input }, { token }) => {
     try {
-        console.log(id, input)
+        const userToken = verifyToken(token)
+        verifyAdmin(userToken)
         if(!id) throw new Error("No se ha enviado un ID")
         const role = await Role.findByIdAndUpdate(id, input, {new: true})
         if(!role) throw new Error("No se ha encontrado el rol")

@@ -5,14 +5,14 @@ import { verifyAdmin } from "../utils/auth.js"
 // Querys
 const getUsers = async (_, { input }) => {
     const query = filter(input)
-    const Users = await User.find(query).populate("role")
+    const Users = await User.find(query).populate("role").populate("country")
 
     return Users
   }
   
 const getUser = async (_, {id}) => { 
     if(!id) throw new Error("No se ha enviado un ID")
-    const user = await User.findById(id).populate("role")
+    const user = await User.findById(id).populate("role").populate("country")
 
     if(!user) throw new Error("No se ha encontrado el Usuario")
     return user 
@@ -47,7 +47,7 @@ const createUser = async (_, { input }, {token}) => {
         input.password = await User.encryptPassword(input.password)
         const newUser = new User(input)
         await newUser.save()
-        return await newUser.populate("role")
+        return await newUser.populate("role").populate("country")
     } catch (error) {
         if(error.code === 11000) throw new Error("El nombre de usuario o email ya existe")
         throw new Error(error)
@@ -61,7 +61,7 @@ const updateUser = async (_, { id, input }, {token}) => {
         verifyAdmin(userToken);
         console.log(userToken);
         if(!id) throw new Error("No se ha enviado un ID")
-        const user = await User.findByIdAndUpdate(id, input, {new: true}).populate("role")
+        const user = await User.findByIdAndUpdate(id, input, {new: true}).populate("role").populate("country")
         if(!user) throw new Error("No se ha encontrado el Usuario")
         return user
     }catch(error){

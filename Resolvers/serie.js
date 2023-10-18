@@ -13,7 +13,7 @@ const getSeries = async (_, { input }) => {
     const series = await Serie.find(query).populate({
         path: 'user',
         populate: {
-          path: 'role'
+          path: 'role country'
         }
       }).populate("genrers").populate({
         path: 'studio',
@@ -33,7 +33,7 @@ const getSerie = async (_, { id }) => {
     const serie = await Serie.findById(id).populate({
         path: 'user',
         populate: {
-          path: 'role'
+          path: 'role country'
         }
       }).populate("genrers").populate({
         path: 'studio',
@@ -56,7 +56,7 @@ const createSerie = async (_, { input }, {token}) => {
         return await newSerie.populate({
             path: 'user',
             populate: {
-              path: 'role'
+              path: 'role country'
             }
           }).populate("genrers").populate({
             path: 'studio',
@@ -76,7 +76,7 @@ const updateSerie = async (_, { id,input}, {token}) => {
         const userToken = verifyToken(token)
         verifyAdmin(userToken) 
         if(!id) throw new Error("No se ha enviado un ID")
-        const serie = await Serie.findByIdAndUpdate(id, input, {new: true}).populate({ path: 'user', populate: { path: 'role' } }).populate("genrers").populate({ path: 'studio', populate: { path: 'producer' } })
+        const serie = await Serie.findByIdAndUpdate(id, input, {new: true}).populate({ path: 'user', populate: { path: 'role country' } }).populate("genrers").populate({ path: 'studio', populate: { path: 'producer' } })
         if(!serie) throw new Error("No se ha encontrado la Serie")
         return serie
     } catch (error) {

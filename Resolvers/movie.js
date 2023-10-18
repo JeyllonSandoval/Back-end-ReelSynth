@@ -16,7 +16,7 @@ const getMovies = async (_, { input } ) => {
        const movies = await Movie.find(query).populate({
         path: 'user',
         populate: {
-          path: 'role'
+          path: 'role country'
         }
       }).populate("genrers").populate({
         path: 'studio',
@@ -37,7 +37,7 @@ const getMovie = async (_, { id }) => {
     const movie = await Movie.findById(id).populate({
       path: 'user',
       populate: {
-        path: 'role'
+        path: 'role country'
       }
     }).populate("genrers").populate({
       path: 'studio',
@@ -61,7 +61,7 @@ const createMovie = async (_, { input }, {token}) => {
         return await newMovie.populate({
           path: 'user',
           populate: {
-            path: 'role'
+            path: 'role country'
           }
         }).populate("genrers").populate({
           path: 'studio',
@@ -83,7 +83,7 @@ const updateMovie = async (_, { id,input}, {token}) => {
         verifyAdmin(userToken) 
         if(!id) throw new Error("No se ha enviado un ID")
         console.log(id,input)
-        const movie = await Movie.findByIdAndUpdate(id, input, {new: true}).populate({ path: 'user', populate: { path: 'role' } }).populate("genrers").populate({ path: 'studio', populate: { path: 'producer' } })
+        const movie = await Movie.findByIdAndUpdate(id, input, {new: true}).populate({ path: 'user', populate: { path: 'role country' } }).populate("genrers").populate({ path: 'studio', populate: { path: 'producer' } })
         if(!movie) throw new Error("No se ha encontrado la Movie")
         return movie
     } catch (error) {

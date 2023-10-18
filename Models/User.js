@@ -28,6 +28,10 @@ const userSchema = new Schema({
         type: String,
         default: 'ACTIVE'
     },
+    country: {
+        type: Schema.Types.ObjectId,
+        ref: 'Country'
+    },
     role: {
         ref: "Role",
         type: Schema.Types.ObjectId
