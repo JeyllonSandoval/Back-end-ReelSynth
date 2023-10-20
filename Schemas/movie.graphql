@@ -8,6 +8,10 @@ type Movie {
     imgURL: String
     duration: Int
     user: User
+    likeCount: Int
+    commentCount: Int
+    rateCount: Int
+    rateTotal: Int
     studio: Studio
     genrers: [Genrer]
     status: String

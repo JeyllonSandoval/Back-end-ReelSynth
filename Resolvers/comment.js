@@ -1,41 +1,65 @@
-
 import Comment from "../Models/Comment.js"
+import User from "../Models/User.js"
 import { filter } from "../helpers/Filter.js"
 import { verifyAdmin } from "../utils/auth.js"
 import { verifyToken } from "../utils/Token.js"
+import { getModel } from "../helpers/models.js"
 
+
+const updateCounter = async (comment) => {
+    const { entityID, entityType, status } = comment;
+  
+    try {
+      const entity = await getModel(entityType).findByIdAndUpdate(entityID, {
+        $inc: {
+          commentCount: status === 'ACTIVE' ? 1 : -1,
+        },
+      }, { new: true });
+      return entity
+    } catch (error) {
+      console.error('Error updating comment count:', error.message || error);
+    }
+  };
 // Querys
 const getComments = async (_, { input }) => {
     console.log(input)
     const query = filter(input)
-    const comments = await Comment.find(query).populate({
-        path: 'user serie season episode movie',
-        strictPopulate: false
+    const comment = await Comment.find(query).populate({
+        path: 'entityID'
+    }).populate({
+        path: 'user',
+        populate: {
+          path: 'role country'
+        }
     }).populate({
         path: 'parent',
         populate: {
             path: 'user'
         },
-        match: { parent: input.parent },
         strictPopulate: false
     })
 
-    return comments
+    return comment
   }
   
-const getComment = async (_, { id }) => { 
-    if(!id) throw new Error("No se ha enviado un ID")
-    const comment = await Comment.findById(id).populate({
-        path: 'user serie season episode movie',
-        strictPopulate: false
-    }).populate({
+const getComment = async (_, { entityID }, { token }) => { 
+    const userToken = verifyToken(token)
+    const comment = await Comment.findOne({user: userToken.id, entityID}).populate({
+      path: 'entityID'
+  }).populate({
+      path: 'user',
+      populate: {
+        path: 'role country'
+      }
+  }).populate({
         path: 'parent',
         populate: {
             path: 'user'
         },
         strictPopulate: false
-    })
-    if(!comment) throw new Error("No se ha encontrado el comment")
+  })
+
+  
     return comment 
   }
 
@@ -43,49 +67,49 @@ const getComment = async (_, { id }) => {
 // Mutations
 const createComment = async (_, { input }, { token }) => {
     try {
+        if(!input) throw new Error("No se ha enviado el input")
         const userToken = verifyToken(token)
-        verifyAdmin(userToken)
         const newComment = new Comment({...input, user: userToken.id})
         await newComment.save()
-        return await newComment.populate({
-            path: 'user serie season episode movie',
-            strictPopulate: false
-        }).populate({
+        await newComment.populate({
             path: 'parent',
             populate: {
                 path: 'user'
             },
-            match: { parent: input.parent },
             strictPopulate: false
         })
+       
+        newComment.entityID = await getModel(newComment.entityType).findById(newComment.entityID)
+        newComment.user = await User.findById(newComment.user).populate({
+            path: 'role country'
+        })
+        
+        await updateCounter(newComment)
+
+        return newComment
+        
     } catch (error) {
         console.log(error)
-        throw new Error("Error al crear el comment: "+error.message || error)
+        throw new Error("Error al crear el Comment: "+error.message || error)
     }
 }
 
-const updateComment = async (_, { id,input }, { token }) => {
-    try {
-        const userToken = verifyToken(token)
-        verifyAdmin(userToken)
-        if(!id) throw new Error("No se ha enviado un ID")
-        const comment = await Comment.findByIdAndUpdate(id, input, {new: true}).populate({
-            path: 'user serie season episode movie',
-            strictPopulate: false
-        }).populate({
-            path: 'parent',
-            populate: {
-                path: 'user'
-            },
-            match: { parent: input.parent },
-            strictPopulate: false
-        })
-        if(!comment) throw new Error("No se ha encontrado el comment")
-        return comment
-    } catch (error) {
-        console.log(error)
-        throw new Error("Error al actualizar el comment: "+error.message || error)
-    }
+const updateComment = async (_, {id, input }, { token }) => {
+      // genera este codigo
+      const userToken = verifyToken(token)
+      const comment = await Comment.findById(id);
+  
+      if(!comment) throw new Error("No se encontro el comment")
+  
+      if (comment.user.toString() !== userToken.id && !verifyAdmin(userToken)) {
+        throw new Error("No tienes permisos para actualizar este Comment");
+      }
+      
+      comment.content = input.content;
+      comment.status = 'EDITED';
+      await comment.save();
+      
+      return comment;
 }
 
   export const commentResolvers = {

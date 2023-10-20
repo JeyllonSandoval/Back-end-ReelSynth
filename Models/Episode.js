@@ -16,10 +16,6 @@ const episodeSchema = new Schema({
         type: Number,
         require: true
     },
-    rating: {
-        type: Number,
-        default: 0
-    },
     season: {
         ref: "Season",
         type: Schema.Types.ObjectId
@@ -28,6 +24,26 @@ const episodeSchema = new Schema({
         type: String,
         default: 'ACTIVE'
     },
+    likeCount: {
+        type: Number,
+        default: 0
+      },
+    commentCount: {
+        type: Number,
+        default: 0
+    },
+    rateCount: {
+        type: Number,
+        default: 0
+    },
+    rateTotal: {
+        type: Number,
+        default: 0
+    },
+    rating: {
+        type: Number,
+        default: 0
+    }
 },
     {
         timestamps: true,

@@ -11,6 +11,9 @@ import { seasonResolvers } from "./season.js";
 import { hostResolvers } from "./host.js";
 import { countryResolvers } from "./country.js";
 import { commentResolvers } from "./comment.js";
+import { likeResolvers } from "./like.js";
+import { rateResolvers } from "./rate.js";
+import { videoResolvers } from "./video.js";
 // Unimos todos los resolvers
 const resolvers = mergeResolvers([ 
     roleResolvers, 
@@ -24,7 +27,10 @@ const resolvers = mergeResolvers([
     serieResolvers,
     seasonResolvers,
     episodeResolvers,
-    commentResolvers
+    commentResolvers,
+    likeResolvers,
+    rateResolvers,
+    videoResolvers
 ]);
 // Exportamos los resolvers ya unidos
 export default resolvers;

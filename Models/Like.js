@@ -1,6 +1,6 @@
 import {Schema, model} from 'mongoose'
 
-const rateSchema = new Schema({
+const likeSchema = new Schema({
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User',
@@ -16,9 +16,10 @@ const rateSchema = new Schema({
         refPath: 'entityType',  // Hace referencia al campo 'entityType'
         required: true
     },
-    rate: {
-        type: Number,
-        required: true
+    liked: {
+        type: Boolean,
+        required: true,
+        default: true
     },
     status: {
         type: String,
@@ -30,5 +31,4 @@ const rateSchema = new Schema({
         versionKey: false 
 })
 
-
-export default model('Rate',rateSchema);
+export default model('Like',likeSchema);

@@ -22,7 +22,11 @@ const studioSchema = new Schema({
     imgURL: {
         type: String,
         trim: true
-    }
+    },
+    likeCount: {
+        type: Number,
+        default: 0
+      }
 },
     {
         timestamps: true,

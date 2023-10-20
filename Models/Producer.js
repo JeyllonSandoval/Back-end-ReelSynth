@@ -11,6 +11,10 @@ const producerSchema = new Schema({
         type: String,
         trim: true
     },
+    commentCount: {
+        type: Number,
+        default: 0
+    },
     status: {
         type: String,
         default: 'ACTIVE'

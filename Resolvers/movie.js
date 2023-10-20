@@ -1,4 +1,5 @@
 import Movie from "../Models/Movie.js"
+import Like from "../Models/Like.js"
 import { verifyToken } from "../utils/Token.js"
 import { verifyAdmin } from "../utils/auth.js"
 import { filter } from "../helpers/Filter.js"
@@ -11,7 +12,7 @@ const getMovies = async (_, { input } ) => {
       const {producer, ...input2} = input
       
       const query = filter(input2)
-    
+
 
        const movies = await Movie.find(query).populate({
         path: 'user',
@@ -24,6 +25,7 @@ const getMovies = async (_, { input } ) => {
           path: 'producer'
         }
       })
+
 
       if(producer){
         return movies.filter(movie => movie.studio.producer.id == producer)

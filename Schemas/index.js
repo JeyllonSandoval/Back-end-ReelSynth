@@ -16,6 +16,9 @@ const episodeSchema = fs.readFileSync("./Schemas/episode.graphql", "utf8");
 const hostSchema = fs.readFileSync("./Schemas/host.graphql", "utf8");
 const countrySchema = fs.readFileSync("./Schemas/country.graphql", "utf8");
 const commentSchema = fs.readFileSync("./Schemas/comment.graphql", "utf8");
+const likeSchema = fs.readFileSync("./Schemas/like.graphql", "utf8");
+const rateSchema = fs.readFileSync("./Schemas/rate.graphql", "utf8");
+const videoSchema = fs.readFileSync("./Schemas/video.graphql", "utf8");
 // Unimos todos los Schemas en uno solo
 const typeDefs = mergeTypeDefs([
     roleSchema, 
@@ -29,6 +32,9 @@ const typeDefs = mergeTypeDefs([
     serieSchema,
     seasonSchema,
     episodeSchema,
-    commentSchema
+    commentSchema,
+    likeSchema,
+    rateSchema,
+    videoSchema
 ])
 export default typeDefs;

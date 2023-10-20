@@ -5,21 +5,15 @@ const commentSchema = new Schema({
         type: String,
         required: true
     },
-    serie: {
+    entityType: {
+        type: String,
+        enum: ['Movie', 'Season', 'Series', 'Episode'],
+        required: true
+      },
+    entityID: {
         type: Schema.Types.ObjectId,
-        ref: 'Serie'
-    },
-    season: {
-        type: Schema.Types.ObjectId,
-        ref: 'Season'
-    },
-    episode: {
-        type: Schema.Types.ObjectId,
-        ref: 'Episode'
-    },  
-    movie: {
-        type: Schema.Types.ObjectId,
-        ref: 'Movie'
+        refPath: 'entityType',  // Hace referencia al campo 'entityType'
+        required: true
     },
     parent: {
         type: Schema.Types.ObjectId,

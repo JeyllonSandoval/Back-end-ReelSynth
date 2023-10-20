@@ -11,13 +11,15 @@ const videoSchema = new Schema({
         ref: "Host",
         type: Schema.Types.ObjectId
     },
-    episode: {
-        ref: "Episode",
-        type: Schema.Types.ObjectId
-    },
-    movie: {
-        ref: "Movie",
-        type: Schema.Types.ObjectId
+    entityType: {
+        type: String,
+        enum: ['Movie', 'Episode'],
+        required: true
+      },
+    entityID: {
+        type: Schema.Types.ObjectId,
+        refPath: 'entityType',  // Hace referencia al campo 'entityType'
+        required: true
     },
     user: {
         ref: "User",

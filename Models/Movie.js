@@ -15,10 +15,6 @@ const movieSchema = new Schema({
         type: Number,
         required: false
     },
-    rating: {
-        type: Number,
-        required: false
-    },
     imgURL: {
         type: String,
         required: false
@@ -44,7 +40,27 @@ const movieSchema = new Schema({
     genrers: [{
         ref: "Genrer",
         type: Schema.Types.ObjectId
-    }]
+    }],
+    likeCount: {
+        type: Number,
+        default: 0
+      },
+    commentCount: {
+        type: Number,
+        default: 0
+    },
+    rateCount: {
+            type: Number,
+            default: 0
+        },
+    rateTotal: {
+        type: Number,
+        default: 0
+    },
+    rating: {
+        type: Number,
+        default: 0
+    }
 },
     {
         timestamps: true,

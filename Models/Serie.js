@@ -11,9 +11,6 @@ const serieSchema = new Schema({
         type: String,
         trim: true
     },
-    rating: {
-        type: Number
-    },
     seasons: {
         type: Number,
         default: 0
@@ -34,6 +31,26 @@ const serieSchema = new Schema({
         type: String,
         default: 'ACTIVE'
     },
+    likeCount: {
+        type: Number,
+        default: 0
+      },
+    commentCount: {
+        type: Number,
+        default: 0
+    },
+    rateCount: {
+        type: Number,
+        default: 0
+    },
+    rateTotal: {
+        type: Number,
+        default: 0
+    },
+    rating: {
+        type: Number,
+        default: 0
+    }
 },
     {
         timestamps: true,

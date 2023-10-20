@@ -4,6 +4,7 @@ type Episode {
     title: String!
     description: String
     year: Int
+    likeCount: Int
     rating: Float
     season: Season
     status: String

@@ -5,6 +5,7 @@ type Serie {
     description: String
     rating: Float
     studio: Studio
+    likeCount: Int
     user: User
     genrers: [Genrer]
     seasons: Int
