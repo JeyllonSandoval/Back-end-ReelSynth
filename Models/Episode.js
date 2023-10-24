@@ -16,6 +16,13 @@ const episodeSchema = new Schema({
         type: Number,
         require: true
     },
+    number: {
+        type: Number,
+        require: true
+    },
+    imgURL: {
+        type: String
+    },
     season: {
         ref: "Season",
         type: Schema.Types.ObjectId

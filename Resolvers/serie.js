@@ -6,7 +6,7 @@ import { filter } from "../helpers/Filter.js"
 
 // Querys
 const getSeries = async (_, { input }) => {
-
+    if(!input) input = {}
     const {producer, ...input2} = input
 
     const query = filter(input2)

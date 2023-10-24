@@ -20,6 +20,10 @@ const commentSchema = new Schema({
         ref: 'Comment',
         default: null
     },
+    commentCount: {
+        type: Number,
+        default: 0
+    },
     user: {
         type: Schema.Types.ObjectId,
         ref: 'User'
@@ -27,6 +31,10 @@ const commentSchema = new Schema({
     status: {
         type: String,
         default: 'ACTIVE'
+    },
+    likeCount: {
+        type: Number,
+        default: 0
     }
 }, { 
     timestamps: true,

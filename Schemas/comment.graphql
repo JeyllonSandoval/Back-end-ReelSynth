@@ -6,6 +6,8 @@ type Comment {
     entityID: entityID!
     parent: Comment
     user: User
+    commentCount: Int
+    likeCount: Int
     createdAt: String
     updatedAt: String
     status: String

@@ -50,6 +50,14 @@ const serieSchema = new Schema({
     rating: {
         type: Number,
         default: 0
+    },
+    imgURL: {
+        type: String,
+        trim: true
+    },
+    year: {
+        type: Number,
+        trim: true
     }
 },
     {

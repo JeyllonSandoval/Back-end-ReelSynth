@@ -10,6 +10,9 @@ type Serie {
     genrers: [Genrer]
     seasons: Int
     status: String
+    commentCount: Int
+    imgURL: String
+    year: Int
 }
 
 input inputSerie {
@@ -22,6 +25,8 @@ input inputSerie {
     genrers: [ID]
     producer: ID
     user: ID
+    imgURL: String
+    year: Int
 }
 
 type Query {

@@ -60,7 +60,7 @@ const createMovie = async (_, { input }, {token}) => {
         verifyAdmin(userToken)
         const newMovie = new Movie({...input, user: userToken.id})
         await newMovie.save()
-        return await newMovie.populate({
+        const movie = await Movie.findById(newMovie.id).populate({
           path: 'user',
           populate: {
             path: 'role country'
@@ -71,6 +71,8 @@ const createMovie = async (_, { input }, {token}) => {
             path: 'producer'
           }
         })
+
+        return movie
         
     } catch (error) {
         console.log(error)

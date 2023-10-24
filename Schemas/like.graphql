@@ -4,6 +4,8 @@ type entityID {
     title: String
     description: String
     imgURL: String
+    content: String
+    user: User
     status: String
     likeCount: Int
     commentCount: Int

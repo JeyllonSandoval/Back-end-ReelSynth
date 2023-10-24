@@ -1,5 +1,6 @@
 
 import Season from "../Models/Season.js"
+import Serie from "../Models/Serie.js"
 import { filter } from "../helpers/Filter.js"
 
 // Querys
@@ -35,12 +36,9 @@ const createSeason = async (_, { input }, { token }) => {
         verifyAdmin(userToken)
         const newSeason = new Season(input)
         await newSeason.save()
-        return await newSeason.populate({
-            path: 'serie',
-            populate: {
-                path: 'genrers'
-            }
-        })
+        newSeason.serie = await Serie.findByIdAndUpdate(season.serie, { $inc: { seasons: 1 } }, {new: true} ).populate('genrers')
+
+        return newSeason
     } catch (error) {
         console.log(error)
         throw new Error("Error al crear el Season: "+error.message || error)

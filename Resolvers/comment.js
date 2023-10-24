@@ -12,7 +12,7 @@ const updateCounter = async (comment) => {
     try {
       const entity = await getModel(entityType).findByIdAndUpdate(entityID, {
         $inc: {
-          commentCount: status === 'ACTIVE' ? 1 : -1,
+          commentCount: status !== 'DELETED' ? 1 : -1,
         },
       }, { new: true });
       return entity
@@ -71,14 +71,21 @@ const createComment = async (_, { input }, { token }) => {
         const userToken = verifyToken(token)
         const newComment = new Comment({...input, user: userToken.id})
         await newComment.save()
-        await newComment.populate({
-            path: 'parent',
+
+      if(newComment.parent){
+          const parent = await Comment.findById(newComment.parent)
+
+          parent.commentCount += 1;
+
+          await parent.save()
+
+          newComment.parent = await parent.populate({
+            path: 'user',
             populate: {
-                path: 'user'
-            },
-            strictPopulate: false
-        })
-       
+                path: 'role country'
+            }
+          })
+      }
         newComment.entityID = await getModel(newComment.entityType).findById(newComment.entityID)
         newComment.user = await User.findById(newComment.user).populate({
             path: 'role country'
