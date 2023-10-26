@@ -2,6 +2,7 @@ import { filter } from "../helpers/Filter.js"
 import User from "../Models/User.js"
 import { createToken, verifyToken } from "../utils/Token.js"
 import { verifyAdmin } from "../utils/auth.js"
+import Role from "../Models/Role.js"
 // Querys
 const getUsers = async (_, { input }) => {
     const query = filter(input)
@@ -18,6 +19,16 @@ const getUser = async (_, {id}) => {
     return user 
   }
 
+  const getUserByToken = async (_, {token}) => { 
+
+    if(!token) throw new Error("No se ha enviado un Token")
+    const userToken = verifyToken(token)
+    const user = await User.findById(userToken.id).populate("role").populate("country")
+
+    if(!user) throw new Error("No se ha encontrado el Usuario")
+    return user 
+  }
+
 const login = async (_, {input}) => { 
     console.log(input);
     const {userName, password, email} = input
@@ -25,13 +36,29 @@ const login = async (_, {input}) => {
     if(!password) throw new Error("No se ha enviado una contraseña")
 
     const userFound = await User.findOne({ $or: [{ userName: userName }, { email: email }] }).populate('role')
-    console.log(userFound);
     if(!userFound) throw new Error("Usuario/Email o contraseña incorrectos")
     
     const matchPassword = await User.comparePassword(password, userFound.password)
     if(!matchPassword) throw new Error("Usuario/Email o contraseña incorrectos")
 
     const token = createToken(userFound)
+    return { token }
+}
+
+const singup = async (_, {input}) => {
+    const {userName, password, email} = input
+    if(!userName && !email) throw new Error("No se ha enviado un nombre de usuario o email")
+    if(!password) throw new Error("No se ha enviado una contraseña")
+
+    const userFound = await User.findOne({ $or: [{ userName: userName }, { email: email }] })
+    if(userFound) throw new Error("Usuario/Email ya existe")
+    const publicRole = await Role.findOne({name: "public"})
+    const newUser = new User(input)
+    newUser.password = await User.encryptPassword(password)
+    newUser.role = publicRole.id
+    await newUser.save()
+    newUser.role = publicRole
+    const token = createToken(newUser)
     return { token }
 }
 
@@ -74,11 +101,13 @@ const updateUser = async (_, { id, input }, {token}) => {
   export const userResolvers = {
     Query: {
         getUsers,
-        getUser
+        getUser,
+        getUserByToken
     },
     Mutation: {
         createUser,
         updateUser,
-        login
+        login,
+        singup
     }
 }

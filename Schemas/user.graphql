@@ -36,14 +36,15 @@ input UserInput{
 }
 
 type Query{ 
+    getUserByToken(token: String): User
     getUsers(input: UserInput): [User]
     getUser(id: ID): User
 }
 
 type Mutation{
     login(input: LoginInput!): Token
-    singup(input: UserInput): User
+    singup(input: UserInput!): Token
     createUser(input: UserInput!): User
-    updateUser(id: ID!, input: UserInput): User
+    updateUser(id: ID!, input: UserInput!): User
     deleteUser(id: ID!): User
 }
