@@ -45,14 +45,14 @@ const login = async (_, {input}) => {
     return { token }
 }
 
-const singup = async (_, {input}) => {
+const signup = async (_, {input}) => {
     const {userName, password, email} = input
     if(!userName && !email) throw new Error("No se ha enviado un nombre de usuario o email")
     if(!password) throw new Error("No se ha enviado una contraseña")
 
     const userFound = await User.findOne({ $or: [{ userName: userName }, { email: email }] })
     if(userFound) throw new Error("Usuario/Email ya existe")
-    const publicRole = await Role.findOne({name: "public"})
+    const publicRole = await Role.findOne({name: "Public"})
     const newUser = new User(input)
     newUser.password = await User.encryptPassword(password)
     newUser.role = publicRole.id
@@ -98,7 +98,7 @@ const updateUser = async (_, { id, input }, {token}) => {
 }
 
 
-  export const userResolvers = {
+export const userResolvers = {
     Query: {
         getUsers,
         getUser,
@@ -108,6 +108,6 @@ const updateUser = async (_, { id, input }, {token}) => {
         createUser,
         updateUser,
         login,
-        singup
+        signup
     }
 }
