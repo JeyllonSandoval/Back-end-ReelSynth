@@ -43,7 +43,7 @@ type Query{
 
 type Mutation{
     login(input: LoginInput!): Token
-    singup(input: UserInput!): Token
+    signup(input: UserInput!): Token
     createUser(input: UserInput!): User
     updateUser(id: ID!, input: UserInput!): User
     deleteUser(id: ID!): User
