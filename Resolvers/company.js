@@ -6,7 +6,7 @@ import { filter } from "../helpers/Filter.js"
 const getCompanys = async (_, { input }) => {
     const query = filter(input)
     const companys = await Company.find(query)
-    return Companys
+    return companys
 }
 
 const getCompany = async (_, { id }) => { 

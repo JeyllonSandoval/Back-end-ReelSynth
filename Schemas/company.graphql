@@ -6,7 +6,7 @@ type Company {
     status: String
 }
 
-input CompanyInput {
+input inputCompany {
     imgURL: String
     name: String!
     description: String
