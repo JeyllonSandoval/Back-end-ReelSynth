@@ -1,0 +1,25 @@
+type Company {
+    id: ID!
+    imgURL: String
+    name: String!
+    description: String
+    status: String
+}
+
+input CompanyInput {
+    imgURL: String
+    name: String!
+    description: String
+    status: String
+}
+
+type Query {
+    companies(input: inputCompany): [Company]
+    company(id: ID!): Company
+}
+
+type Mutation {
+    createCompany(input: inputCompany): Company
+    updateCompany(id: ID!, input: inputCompany): Company
+    deleteCompany(id: ID!): Company
+}
