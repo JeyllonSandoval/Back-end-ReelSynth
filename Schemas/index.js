@@ -19,6 +19,7 @@ const commentSchema = fs.readFileSync("./Schemas/comment.graphql", "utf8");
 const likeSchema = fs.readFileSync("./Schemas/like.graphql", "utf8");
 const rateSchema = fs.readFileSync("./Schemas/rate.graphql", "utf8");
 const videoSchema = fs.readFileSync("./Schemas/video.graphql", "utf8");
+const companySchema = fs.readFileSync("./Schemas/company.graphql", "utf8");
 // Unimos todos los Schemas en uno solo
 const typeDefs = mergeTypeDefs([
     roleSchema, 
@@ -35,6 +36,7 @@ const typeDefs = mergeTypeDefs([
     commentSchema,
     likeSchema,
     rateSchema,
-    videoSchema
+    videoSchema,
+    companySchema   
 ])
 export default typeDefs;

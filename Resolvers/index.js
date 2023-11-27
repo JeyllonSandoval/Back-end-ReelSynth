@@ -14,6 +14,7 @@ import { commentResolvers } from "./comment.js";
 import { likeResolvers } from "./like.js";
 import { rateResolvers } from "./rate.js";
 import { videoResolvers } from "./video.js";
+import { companyResolvers } from "./company.js";
 // Unimos todos los resolvers
 const resolvers = mergeResolvers([ 
     roleResolvers, 
@@ -30,7 +31,8 @@ const resolvers = mergeResolvers([
     commentResolvers,
     likeResolvers,
     rateResolvers,
-    videoResolvers
+    videoResolvers,
+    companyResolvers
 ]);
 // Exportamos los resolvers ya unidos
 export default resolvers;
