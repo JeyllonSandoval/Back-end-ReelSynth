@@ -18,4 +18,3 @@ server.listen().then(({ url }) => {
   console.log(`Servidor GraphQL listo en ${url}`);
 });
 
-

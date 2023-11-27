@@ -14,8 +14,8 @@ input inputCompany {
 }
 
 type Query {
-    companies(input: inputCompany): [Company]
-    company(id: ID!): Company
+    getCompanys(input: inputCompany): [Company]
+    getCompany(id: ID!): Company
 }
 
 type Mutation {
