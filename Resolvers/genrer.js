@@ -5,7 +5,7 @@ import { verifyAdmin } from "../utils/auth.js"
 
 // Querys
 const getGenrers = async (_, { input }) => {
-    const genrers = await Genrer.find()
+    const genrers = await Genrer.find(input)
     return genrers
     }
 
