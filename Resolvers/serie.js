@@ -3,6 +3,7 @@ import Serie from "../Models/Serie.js"
 import { verifyToken } from "../utils/Token.js"
 import { verifyAdmin } from "../utils/auth.js"
 import { filter } from "../helpers/Filter.js"
+import User from "../Models/User.js"
 
 // Querys
 const getSeries = async (_, { input }) => {
@@ -53,7 +54,8 @@ const createSerie = async (_, { input }, {token}) => {
         verifyAdmin(userToken) 
         const newSerie = new Serie({...input, user: userToken.id})
         await newSerie.save()
-        return await newSerie.populate({
+
+        const serie = await Serie.findById(newSerie.id).populate({
             path: 'user',
             populate: {
               path: 'role country'
@@ -64,6 +66,8 @@ const createSerie = async (_, { input }, {token}) => {
               path: 'producer'
             }
           })
+
+        return serie
     } catch (error) {
         console.log(error)
         throw new Error("Error al crear la Serie: "+error.message || error)
