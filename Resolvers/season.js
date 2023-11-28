@@ -1,6 +1,8 @@
 
 import Season from "../Models/Season.js"
 import Serie from "../Models/Serie.js"
+import { verifyToken } from "../utils/Token.js"
+import { verifyAdmin } from "../utils/auth.js"
 import { filter } from "../helpers/Filter.js"
 
 // Querys
@@ -36,7 +38,8 @@ const createSeason = async (_, { input }, { token }) => {
         verifyAdmin(userToken)
         const newSeason = new Season(input)
         await newSeason.save()
-        newSeason.serie = await Serie.findByIdAndUpdate(season.serie, { $inc: { seasons: 1 } }, {new: true} ).populate('genrers')
+
+        newSeason.serie = await Serie.findByIdAndUpdate(newSeason.serie, { $inc: { seasons: 1 } }, {new: true} ).populate('genrers')
 
         return newSeason
     } catch (error) {

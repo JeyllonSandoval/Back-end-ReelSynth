@@ -8,6 +8,11 @@ type Episode {
     rating: Float
     season: Season
     status: String
+    number: Int
+    imgURL: String
+    rateCount: Int
+    rateTotal: Int
+    commentCount: Int
 }
 
 input inputEpisode {
@@ -15,6 +20,8 @@ input inputEpisode {
     description: String
     year: Int
     rating: Float
+    imgURL: String
+    number: Int
     season: ID
     status: String
 }

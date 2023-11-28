@@ -3,6 +3,7 @@ import Episode from "../Models/Episode.js"
 import { filter } from "../helpers/Filter.js"
 import { verifyToken } from "../utils/Token.js"
 import { verifyAdmin } from "../utils/auth.js"
+import Season from "../Models/Season.js"
 
 // Querys
 const getEpisodes = async (_, { input }) => {
@@ -21,7 +22,7 @@ const getEpisodes = async (_, { input }) => {
 
 const getEpisode = async (_, { id }) => { 
     if(!id) throw new Error("No se ha enviado un ID")
-    const Episode = await Episode.findById(id).populate({
+    const episode = await Episode.findById(id).populate({
         path: "season",
         populate: {
             path: "serie",
@@ -30,8 +31,8 @@ const getEpisode = async (_, { id }) => {
             }
         }
     })
-    if(!Episode) throw new Error("No se ha encontrado la Episode")
-    return Episode
+    if(!episode) throw new Error("No se ha encontrado la Episode")
+    return episode
     }
 
 
@@ -41,16 +42,18 @@ const createEpisode = async (_, { input }, {token}) => {
         const userToken = verifyToken(token)
         verifyAdmin(userToken) 
         const newEpisode = new Episode(input) 
+
         await newEpisode.save()
-        return await newEpisode.populate({
-            path: "season",
+       
+        newEpisode.season = await Season.findByIdAndUpdate(newEpisode.season, { $inc: { episodesCount: 1 } }, {new: true} ).populate({
+            path: "serie",
             populate: {
-                path: "serie",
-                populate: {
-                    path: "producer"
-                }
+                path: "producer"
             }
         })
+
+
+        return episode
     } catch (error) {
         console.log(error)
         throw new Error("Error al crear la Episode: "+error.message || error)

@@ -46,6 +46,10 @@ const seasonSchema = new Schema({
     rating: {
         type: Number,
         default: 0
+    },
+    episodesCount: {
+        type: Number,
+        default: 0
     }
 },
     {
