@@ -11,10 +11,7 @@ const getEpisodes = async (_, { input }) => {
     const episodes = await Episode.find(query).populate({
         path: "season",
         populate: {
-            path: "serie",
-            populate: {
-                path: "producer"
-            }
+            path: "serie"
         }
     })
     return episodes
@@ -25,10 +22,7 @@ const getEpisode = async (_, { id }) => {
     const episode = await Episode.findById(id).populate({
         path: "season",
         populate: {
-            path: "serie",
-            populate: {
-                path: "producer"
-            }
+            path: "serie"
         }
     })
     if(!episode) throw new Error("No se ha encontrado la Episode")
@@ -46,10 +40,7 @@ const createEpisode = async (_, { input }, {token}) => {
         await newEpisode.save()
        
         newEpisode.season = await Season.findByIdAndUpdate(newEpisode.season, { $inc: { episodesCount: 1 } }, {new: true} ).populate({
-            path: "serie",
-            populate: {
-                path: "producer"
-            }
+            path: "serie"
         })
 
 
@@ -69,10 +60,7 @@ const updateEpisode = async (_, { id,input}, {token}) => {
         const episode = await Episode.findByIdAndUpdate(id, input, {new: true}).populate({
             path: "season",
             populate: {
-                path: "serie",
-                populate: {
-                    path: "producer"
-                }
+                path: "serie"
             }
         })
         if(!episode) throw new Error("No se ha encontrado la Episode")
