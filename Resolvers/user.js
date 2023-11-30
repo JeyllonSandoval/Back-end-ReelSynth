@@ -85,7 +85,8 @@ const createUser = async (_, { input }, {token}) => {
 const updateUser = async (_, { id, input }, {token}) => {
     try{
         const userToken = verifyToken(token)
-        verifyAdmin(userToken);
+        if(userToken.id !== id) verifyAdmin(userToken);
+        
         if(!id) throw new Error("No se ha enviado un ID")
         if(input.password) input.password = await User.encryptPassword(input.password)
         const user = await User.findByIdAndUpdate(id, input, {new: true}).populate("role country")
