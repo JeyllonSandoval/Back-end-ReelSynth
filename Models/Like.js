@@ -8,7 +8,7 @@ const likeSchema = new Schema({
     },
     entityType: {
         type: String,
-        enum: ['Movie', 'Season', 'Series', 'Episode', 'Comment'],
+        enum: ['Movie', 'Season', 'Serie', 'Episode', 'Comment'],
         required: true
       },
     entityID: {

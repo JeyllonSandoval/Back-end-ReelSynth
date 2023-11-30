@@ -11,9 +11,9 @@ type Rate {
 }
     
 input inputRate {
-    rate: Float!
-    entityType: String!
-    entityID: ID!
+    rate: Float
+    entityType: String
+    entityID: ID
 }
 
 type Query {

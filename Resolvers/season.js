@@ -11,7 +11,7 @@ const getSeasons = async (_, { input }) => {
     const seasons = await Season.find(query).populate({
         path: 'serie',
         populate: {
-            path: 'genrers'
+            path: 'genrers' 
         }
     })
 
