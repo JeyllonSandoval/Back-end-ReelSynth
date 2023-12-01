@@ -4,6 +4,7 @@ import { filter } from "../helpers/Filter.js"
 import User from "../Models/User.js"
 import { verifyToken } from "../utils/Token.js"
 import { getModel } from "../helpers/models.js"
+import Genrer from "../Models/Genrer.js"
 
 
 
@@ -25,17 +26,25 @@ const updateCounter = async (like) => {
 
 
 // Querys
-const getLikes = async (_, { input }) => {
+const getLikes = async (_, { input }, {token}) => {
     console.log(input)
+
+    const userToken = verifyToken(token)
+
     const query = filter(input)
-    const likes = await Like.find(query).populate({
-        path: 'entityID'
+    const likes = await Like.find({user: userToken.id, ...query}).populate({
+        path: 'entityID',
+        populate: {
+          path: 'genrers'
+        }
     }).populate({
         path: 'user',
         populate: {
           path: 'role country'
         }
-    })
+    }).sort({updatedAt: -1})
+
+    
 
     return likes
   }

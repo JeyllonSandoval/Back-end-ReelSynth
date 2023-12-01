@@ -9,10 +9,14 @@ type entityID {
     status: String
     likeCount: Int
     commentCount: Int
+    year: Int
+    genrers: [Genrer]
+    seasons: Int
     rating: Float
     rateCount: Int
     createdAt: String
     updatedAt: String
+    duration: Int
 }
 
 type Like {
@@ -26,13 +30,18 @@ type Like {
     status: String
 }
 
+input inputLikes {
+    entityType: [String]
+    entityID: [ID]
+}
+
 input inputLike {
     entityType: String
     entityID: ID
 }
 
 type Query {
-    getLikes(input: inputLike): [Like]
+    getLikes(input: inputLikes): [Like]
     getLike(entityID: ID!): Like
 }
 
