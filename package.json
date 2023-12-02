@@ -15,10 +15,12 @@
     "apollo-server": "3.12.1",
     "bcryptjs": "2.4.3",
     "dotenv": "16.3.1",
+    "googleapis": "^129.0.0",
     "graphql": "16.8.1",
     "graphql-tools": "9.0.0",
     "jsonwebtoken": "9.0.2",
-    "mongoose": "7.6.3"
+    "mongoose": "7.6.3",
+    "nodemailer": "^6.9.7"
   },
   "devDependencies": {
     "nodemon": "3.0.1"

@@ -3,6 +3,8 @@ import User from "../Models/User.js"
 import { createToken, verifyToken } from "../utils/Token.js"
 import { verifyAdmin } from "../utils/auth.js"
 import Role from "../Models/Role.js"
+import sendEmail from "../emailer.js"
+import { htmlWelcome } from "../Mail/index.js"
 // Querys
 const getUsers = async (_, { input }) => {
     const query = filter(input)
@@ -59,6 +61,15 @@ const signup = async (_, {input}) => {
     await newUser.save()
     newUser.role = publicRole
     const token = createToken(newUser)
+
+    const html = htmlWelcome({userName: newUser.userName})
+
+    sendEmail({
+        to: newUser.email, 
+        subject: "Bienvenido a ReelSynth", 
+        html
+    })
+
     return { token }
 }
 

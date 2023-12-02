@@ -4,6 +4,7 @@ import Serie from "../Models/Serie.js"
 import { verifyToken } from "../utils/Token.js"
 import { verifyAdmin } from "../utils/auth.js"
 import { filter } from "../helpers/Filter.js"
+import { SendEmailFollowers } from "../helpers/SendEmailFollowers.js"
 
 // Querys
 const getSeasons = async (_, { input }) => {
@@ -26,6 +27,7 @@ const getSeason = async (_, { id }) => {
             path: 'genrers'
         }
     })
+
     if(!season) throw new Error("No se ha encontrado el Season")
     return season 
   }
@@ -40,6 +42,10 @@ const createSeason = async (_, { input }, { token }) => {
         await newSeason.save()
 
         newSeason.serie = await Serie.findByIdAndUpdate(newSeason.serie, { $inc: { seasons: 1 } }, {new: true} ).populate('genrers')
+
+        SendEmailFollowers({
+            entityID: newSeason.serie.id
+        })
 
         return newSeason
     } catch (error) {
