@@ -4,7 +4,6 @@ import typeDefs from "./Schemas/index.js"
 import resolvers from "./Resolvers/index.js"
 import {connectDB} from "./db.js"
 import dotenv from 'dotenv';
-import fs from 'fs'
 dotenv.config( { path: './.env' } );
 // Crea una instancia de Apollo Server
 const server = new ApolloServer({ typeDefs, resolvers, context: ({ req }) => {

@@ -28,6 +28,10 @@ const getSeason = async (_, { id }) => {
         }
     })
 
+    SendEmailFollowers({
+        entityID: season.serie.id
+    })
+
     if(!season) throw new Error("No se ha encontrado el Season")
     return season 
   }

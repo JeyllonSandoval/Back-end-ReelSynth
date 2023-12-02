@@ -1,10 +1,12 @@
 import nodemailer from 'nodemailer'
 import { google } from 'googleapis'
+import dotenv from 'dotenv';
+dotenv.config( { path: './.env' } );
 
-const CLIENT_ID = `459550419296-2gq5umhopb9jah4kj114g2krh724iugi.apps.googleusercontent.com`
-const CLIENT_SECRET = "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"
+const CLIENT_ID = process.env.CLIENT_ID
+const CLIENT_SECRET = process.env.CLIENT_SECRET
 const REDIRECT_URI = "https://developers.google.com/oauthplayground"
-const REFRESH_TOKEN = "1//04ufyVfGCdKIhCgYIARAAGAQSNwF-L9IrAd2JKnNY4xn8Mq8EvWf3rCRkumeutMAo3P5m2VXkXWdtmYRbeQ3CO7f80ZRyfGV3EGE"
+const REFRESH_TOKEN = process.env.REFRESH_TOKEN
 
 const oAuth2Client = new google.auth.OAuth2(
     CLIENT_ID,
