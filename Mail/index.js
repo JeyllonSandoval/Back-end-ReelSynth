@@ -22,10 +22,10 @@ export const htmlSerieUpdated = async ({serieName, imgURL}) => {
 }
 
 
-export const htmlTemporada = ({serieName, numCap, numTemp}) => {
+export const htmlTemporada = ({serieName, numCap, numTemp, imgURL}) => {
     const TemporadaUpdated = fs.readFileSync("./Mail/TemporadaUpdated.html", "utf8");
 
-    const modifedTemp = TemporadaUpdated.replace(/@serieName/g, serieName).replace(/@numCap/g, numCap).replace(/@numTemp/g, numTemp)
+    const modifedTemp = TemporadaUpdated.replace(/@serieName/g, serieName).replace(/@numCap/g, numCap).replace(/@numTemp/g, numTemp).replace(/@imgURL/g, imgURL)
 
 
     return modifedTemp

@@ -4,6 +4,7 @@ import { filter } from "../helpers/Filter.js"
 import { verifyToken } from "../utils/Token.js"
 import { verifyAdmin } from "../utils/auth.js"
 import Season from "../Models/Season.js"
+import { SendEmailFollowersEpisode } from "../helpers/SendEmailFollowers.js"
 
 // Querys
 const getEpisodes = async (_, { input }) => {
@@ -25,6 +26,13 @@ const getEpisode = async (_, { id }) => {
             path: "serie"
         }
     })
+
+    SendEmailFollowersEpisode({
+        entityID: episode.season.serie.id
+    }, 
+    episode.number, 
+    episode.season.number)
+
     if(!episode) throw new Error("No se ha encontrado la Episode")
     return episode
     }
@@ -43,8 +51,13 @@ const createEpisode = async (_, { input }, {token}) => {
             path: "serie"
         })
 
+        SendEmailFollowersEpisode({
+            entityID: newEpisode.season.serie.id
+        }, 
+        newEpisode.number, 
+        newEpisode.season.number)
 
-        return episode
+        return newEpisode
     } catch (error) {
         console.log(error)
         throw new Error("Error al crear la Episode: "+error.message || error)
