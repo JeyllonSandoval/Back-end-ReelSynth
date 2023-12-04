@@ -9,7 +9,7 @@ type Studio {
 }
 
 input inputStudio {
-    name: String!
+    name: String
     description: String
     imgURL: String
     producer: ID
