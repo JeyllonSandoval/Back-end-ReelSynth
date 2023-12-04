@@ -53,6 +53,38 @@ const getMovie = async (_, { id }) => {
     }
 
 
+const getTopMovies = async (_, { input, top } ) => {
+      
+      // controlar si se envia un titulo o un genero
+      if(!input) input = {}
+      const {producer, ...input2} = input
+      
+      const query = filter(input2)
+
+
+       const movies = await Movie.find({...query,  })
+       .sort({rating: -1, likeCount: -1})
+       .limit(top)
+       .populate({
+        path: 'user',
+        populate: {
+          path: 'role country'
+        }
+      })
+       .populate("genrers").populate({
+        path: 'studio',
+        populate: {
+          path: 'producer'
+        }
+      })
+
+
+      if(producer){
+        return movies.filter(movie => movie.studio.producer.id == producer)
+      }
+      return movies
+    }
+
 // Mutations
 const createMovie = async (_, { input }, {token}) => {
     try {
@@ -99,7 +131,8 @@ const updateMovie = async (_, { id,input}, {token}) => {
   export const movieResolvers = {
     Query: {
         getMovies,
-        getMovie
+        getMovie,
+        getTopMovies
     },
     Mutation: {
         createMovie,

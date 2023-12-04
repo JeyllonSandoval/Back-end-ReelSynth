@@ -35,6 +35,7 @@ input inputMovie {
 type Query {
     getMovies(input: inputMovie): [Movie]
     getMovie(id: ID!): Movie
+    getTopMovies(input: inputMovie, top: Int!): [Movie]
 }
 
 type Mutation {

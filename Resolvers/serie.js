@@ -45,7 +45,33 @@ const getSerie = async (_, { id }) => {
     if(!serie) throw new Error("No se ha encontrado la Serie")
     return serie
     }
+    
 
+  const getTopSeries = async (_, { input, top }) => {
+      if(!input) input = {}
+      const {producer, ...input2} = input
+  
+      const query = filter(input2)
+      const series = await Serie.find(query)
+      .sort({ rating: -1 , likeCount: -1})
+      .limit(top)
+      .populate({
+          path: 'user',
+          populate: {
+            path: 'role country'
+          }
+        }).populate("genrers").populate({
+          path: 'studio',
+          populate: {
+            path: 'producer'
+          }
+        })
+  
+      if(producer){
+          return series.filter(serie => serie.studio.producer.id == producer)
+        }
+      return series
+      }
 
 // Mutations
 const createSerie = async (_, { input }, {token}) => {
@@ -92,7 +118,8 @@ const updateSerie = async (_, { id,input}, {token}) => {
   export const serieResolvers = {
     Query: {
         getSeries,
-        getSerie
+        getSerie,
+        getTopSeries
     },
     Mutation: {
         createSerie,
