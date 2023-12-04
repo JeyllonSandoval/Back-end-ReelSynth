@@ -14,7 +14,9 @@ const getMovies = async (_, { input } ) => {
       const query = filter(input2)
 
 
-       const movies = await Movie.find(query).populate({
+       const movies = await Movie.find(query)
+       .sort({createdAt: -1})
+       .populate({
         path: 'user',
         populate: {
           path: 'role country'

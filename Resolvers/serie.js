@@ -11,7 +11,9 @@ const getSeries = async (_, { input }) => {
     const {producer, ...input2} = input
 
     const query = filter(input2)
-    const series = await Serie.find(query).populate({
+    const series = await Serie.find(query)
+    .sort({createdAt: -1})
+    .populate({
         path: 'user',
         populate: {
           path: 'role country'
@@ -45,7 +47,7 @@ const getSerie = async (_, { id }) => {
     if(!serie) throw new Error("No se ha encontrado la Serie")
     return serie
     }
-    
+
 
   const getTopSeries = async (_, { input, top }) => {
       if(!input) input = {}
