@@ -3,7 +3,6 @@ import {Schema, model} from 'mongoose'
 const seasonSchema = new Schema({
     title: {
         type: String,
-        unique: true,
         required: true,
         trim: true
     },
