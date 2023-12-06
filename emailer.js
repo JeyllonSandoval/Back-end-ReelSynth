@@ -21,7 +21,7 @@ const createTrans = async () => nodemailer.createTransport({
     service: "gmail",
     auth: {
       type: "OAuth2",
-      user: "joaneliasc86@gmail.com",
+      user: "josewx324@gmail.com",
       clientId: CLIENT_ID,
       clientSecret: CLIENT_SECRET,
       refreshToken: REFRESH_TOKEN,
