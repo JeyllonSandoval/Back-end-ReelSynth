@@ -3,7 +3,6 @@ import {Schema, model} from 'mongoose'
 const episodeSchema = new Schema({
     title: {
         type: String,
-        required: true,
         trim: true
     },
     description: {

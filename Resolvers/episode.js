@@ -43,6 +43,7 @@ const createEpisode = async (_, { input }, {token}) => {
     try {
         const userToken = verifyToken(token)
         verifyAdmin(userToken) 
+        
         const newEpisode = new Episode(input) 
 
         await newEpisode.save()
