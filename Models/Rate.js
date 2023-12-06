@@ -8,7 +8,7 @@ const rateSchema = new Schema({
     },
     entityType: {
         type: String,
-        enum: ['Movie', 'Season', 'Series', 'Episode'],
+        enum: ['Movie', 'Season', 'Serie', 'Episode'],
         required: true
       },
     entityID: {
