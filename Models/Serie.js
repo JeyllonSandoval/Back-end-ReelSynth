@@ -3,6 +3,7 @@ import {Schema, model} from 'mongoose'
 const serieSchema = new Schema({
     title: {
         type: String,
+        unique: true,
         required: true,
         trim: true
     },
