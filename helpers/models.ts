@@ -1,10 +1,10 @@
-import Movie from "../Models/Movie.js"
-import Season from "../Models/Season.js"
-import Serie from "../Models/Serie.js"
-import Episode from "../Models/Episode.js"
-import Comment from "../Models/Comment.js"
+import Movie from "../Models/Movie"
+import Season from "../Models/Season"
+import Serie from "../Models/Serie"
+import Episode from "../Models/Episode"
+import Comment from "../Models/Comment"
 
-export const getModel = (entityType) => {
+export const getModel = (entityType: string) => {
     switch (entityType) {
       case 'Movie':
         return Movie;

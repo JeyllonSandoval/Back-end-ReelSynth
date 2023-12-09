@@ -1,8 +1,8 @@
-import { ApolloServer, gql } from "apollo-server"
+import { ApolloServer } from "apollo-server"
 
-import typeDefs from "./Schemas/index.js"
-import resolvers from "./Resolvers/index.js"
-import {connectDB} from "./db.js"
+import typeDefs from "./Schemas/index"
+import resolvers from "./Resolvers/index"
+import {connectDB} from "./db"
 import dotenv from 'dotenv';
 dotenv.config( { path: './.env' } );
 // Crea una instancia de Apollo Server

@@ -1,11 +1,11 @@
-export const filter = (input) => {
+
+export const filter = (input: {[key: string]: any}) => {
     if(!input) return {}
-    let query = {}
+    let query:{[key:string]:any} = {}
     
     Object.keys(input).forEach((key) => {
         const value = input[key];
         console.log(`${key}: ${value}`)
-        
           if (typeof value === 'number') {
             query[key] = { $gte: value };
           } else if (Array.isArray(value)) {
@@ -17,8 +17,6 @@ export const filter = (input) => {
               query[key] = { $regex: `.*${value}.*`, $options: 'i' };
             }
           }
-        
-        
       });
 
       return query
