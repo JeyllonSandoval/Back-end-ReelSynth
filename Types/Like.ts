@@ -6,7 +6,7 @@ export type LikeType ={
     id: string,
     user: UserType,
     entityID: EntityIDType,
-    entityType: string,
+    entityType: "Movie" | "Serie" | "Season" | "Episode" | "Comment",
     liked: boolean,
     status: string,
     createdAt: string,
