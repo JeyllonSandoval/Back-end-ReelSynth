@@ -1,12 +1,11 @@
-import nodemailer from 'nodemailer'
-import { google } from 'googleapis'
-import dotenv from 'dotenv';
-dotenv.config( { path: './.env' } );
-
-const CLIENT_ID = process.env.CLIENT_ID
-const CLIENT_SECRET = process.env.CLIENT_SECRET
-const REDIRECT_URI = "https://developers.google.com/oauthplayground"
-const REFRESH_TOKEN = process.env.REFRESH_TOKEN
+import nodemailer from "nodemailer";
+import { google } from "googleapis";
+import {
+    CLIENT_ID,
+    CLIENT_SECRET,
+    REFRESH_TOKEN,
+    REDIRECT_URI,
+} from "./config.js";
 
 const oAuth2Client = new google.auth.OAuth2(
     CLIENT_ID,
@@ -14,7 +13,7 @@ const oAuth2Client = new google.auth.OAuth2(
     REDIRECT_URI
 );
 
-  oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
   const options = {
     service: "gmail", 
@@ -43,14 +42,14 @@ const sendEmail = async ({to, subject, html}: sendEmailsProps) => {
         from: '"ReelSynth" <noreply@ReelSynth.info>',
         to,
         subject,
-        html
-    }
+        html,
+    };
 
-    const info = await transporter.sendMail(configEmail)
+    const info = await transporter.sendMail(configEmail);
 
     console.log("Message sent: %s", info.messageId);
-    
-    return info;
-}
 
-export default sendEmail
+    return info;
+};
+
+export default sendEmail;

@@ -22,13 +22,13 @@ const videoSchema = fs.readFileSync("./Schemas/video.graphql", "utf8");
 const companySchema = fs.readFileSync("./Schemas/company.graphql", "utf8");
 // Unimos todos los Schemas en uno solo
 const typeDefs = mergeTypeDefs([
-    roleSchema, 
+    roleSchema,
     countrySchema,
     hostSchema,
-    genrerSchema, 
+    genrerSchema,
     producerSchema,
-    studioSchema, 
-    userSchema, 
+    studioSchema,
+    userSchema,
     movieSchema,
     serieSchema,
     seasonSchema,
@@ -37,6 +37,6 @@ const typeDefs = mergeTypeDefs([
     likeSchema,
     rateSchema,
     videoSchema,
-    companySchema   
-])
+    companySchema,
+]);
 export default typeDefs;

@@ -1,9 +1,6 @@
+import { MONGO_URL } from "./config.js";
+import { connect } from "mongoose";
 
-import {connect} from 'mongoose';
-import dotenv from 'dotenv';
-dotenv.config( { path: './.env' } );
-
-const MONGO_URL = process.env.MONGO_URL || '';
 
 export const connectDB = async () => {
     try {
@@ -13,4 +10,4 @@ export const connectDB = async () => {
         console.log(error);
         process.exit(1);
     }
-}
+};
