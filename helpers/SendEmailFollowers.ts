@@ -1,15 +1,18 @@
 
 
-import sendEmail from "../emailer.js";
-import Like from "../Models/Like.js";
-import { filter } from "./Filter.js";
-import { htmlSerieUpdated, htmlTemporada } from "../Mail/index.js";
+import sendEmail from "../emailer";
+import Like from "../Models/Like";
+import { filter } from "./Filter";
+import { htmlSerieUpdated, htmlTemporada } from "../Mail/index";
+import { LikeType } from "../Types/Like";
 
-export const SendEmailFollowers = async (input) => {
+
+
+export const SendEmailFollowers = async (input: Object) => {
 
     const query = filter(input)
         
-    const likes = await Like.find(query).populate("user entityID")
+    const likes: LikeType[] = await Like.find(query).populate("user entityID")
 
     if(likes.length === 0) return
 
@@ -29,11 +32,11 @@ export const SendEmailFollowers = async (input) => {
 
 }
 
-export const SendEmailFollowersEpisode = async (input, numCap, numTemp ) => {
+export const SendEmailFollowersEpisode = async (input:Object, numCap:string, numTemp:string ) => {
 
     const query = filter(input)
         
-    const likes = await Like.find(query).populate("user entityID")
+    const likes : LikeType[] = await Like.find(query).populate("user entityID")
 
     if(likes.length === 0) return
     

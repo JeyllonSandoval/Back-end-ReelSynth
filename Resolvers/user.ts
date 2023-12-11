@@ -1,20 +1,20 @@
-import { filter } from "../helpers/Filter.js";
-import User from "../Models/User.js";
-import { createToken, verifyToken } from "../utils/Token.js";
-import { verifyAdmin } from "../utils/auth.js";
-import Role from "../Models/Role.js";
-import sendEmail from "../emailer.js";
-import { htmlWelcome } from "../Mail/index.js";
-import { PUBLIC_USER } from "../config.js";
+import { filter } from "../helpers/Filter";
+import User, { IUser } from "../Models/User";
+import { createToken, verifyToken } from "../utils/Token";
+import { verifyAdmin } from "../utils/auth";
+import Role from "../Models/Role";
+import sendEmail from "../emailer";
+import { htmlWelcome } from "../Mail/index";
+import { UserType } from "../Types/User";
 // Querys
-const getUsers = async (_, { input }) => {
+const getUsers = async (_: any, { input }: { input: Object }) => {
     const query = filter(input);
     const Users = await User.find(query).populate("role").populate("country");
 
     return Users;
 };
 
-const getUser = async (_, { id }) => {
+const getUser = async (_: any, { id }: { id: string }) => {
     if (!id) throw new Error("No se ha enviado un ID");
     const user = await User.findById(id).populate("role").populate("country");
 
@@ -22,9 +22,12 @@ const getUser = async (_, { id }) => {
     return user;
 };
 
-const getUserByToken = async (_, { token }) => {
+const getUserByToken = async (_: any, { token }: { token: string }) => {
     if (!token) throw new Error("No se ha enviado un Token");
     const userToken = verifyToken(token);
+    if (typeof userToken === "string") {
+        throw new Error("El token no es válido");
+    }
     const user = await User.findById(userToken.id)
         .populate("role")
         .populate("country");
@@ -33,14 +36,14 @@ const getUserByToken = async (_, { token }) => {
     return user;
 };
 
-const login = async (_, { input }) => {
+const login = async (_: any, { input }: { input: UserType }) => {
     console.log(input);
     const { userName, password, email } = input;
     if (!userName && !email)
         throw new Error("No se ha enviado un nombre de usuario o email");
     if (!password) throw new Error("No se ha enviado una contraseña");
 
-    const userFound = await User.findOne({
+    const userFound: (IUser & UserType) | null = await User.findOne({
         $or: [{ userName: userName }, { email: email }],
     }).populate("role");
     if (!userFound) throw new Error("Usuario/Email o contraseña incorrectos");
@@ -49,6 +52,7 @@ const login = async (_, { input }) => {
         password,
         userFound.password
     );
+
     if (!matchPassword)
         throw new Error("Usuario/Email o contraseña incorrectos");
 
@@ -56,7 +60,7 @@ const login = async (_, { input }) => {
     return { token };
 };
 
-const signup = async (_, { input }) => {
+const signup = async (_: any, { input }: { input: UserType }) => {
     const { userName, password, email } = input;
     if (!userName && !email)
         throw new Error("No se ha enviado un nombre de usuario o email");
@@ -66,13 +70,17 @@ const signup = async (_, { input }) => {
         $or: [{ userName: userName }, { email: email }],
     });
     if (userFound) throw new Error("Usuario/Email ya existe");
-    const publicRole = await Role.findOne({ name: PUBLIC_USER });
+    const publicRole = await Role.findOne({ name: "Public" });
+    if (!publicRole) throw new Error("No se ha encontrado el rol publico");
     const newUser = new User(input);
     newUser.password = await User.encryptPassword(password);
-    newUser.role = publicRole.id;
-    await newUser.save();
-    newUser.role = publicRole;
-    const token = createToken(newUser);
+    newUser.role = publicRole?.id;
+    const user = await newUser.save();
+    if (!user) throw new Error("No se ha podido crear el usuario");
+
+    const populatedUser : UserType = await user.populate("role");
+
+    const token = createToken(populatedUser);
 
     const html = htmlWelcome({ userName: newUser.userName });
 
@@ -85,9 +93,10 @@ const signup = async (_, { input }) => {
     return { token };
 };
 
-const createUser = async (_, { input }, { token }) => {
+const createUser = async (_: any, { input }: { input: UserType }, { token }: {token:string}) => {
     try {
         const userToken = verifyToken(token);
+        if(typeof userToken === "string") throw new Error("El token no es válido");
         verifyAdmin(userToken);
         console.log(userToken);
         if (!input.userName || !input.password || !input.email || !input.role)
@@ -96,17 +105,16 @@ const createUser = async (_, { input }, { token }) => {
         input.password = await User.encryptPassword(input.password);
         const newUser = new User(input);
         await newUser.save();
-        return await newUser.populate("role").populate("country");
+        return await newUser.populate("role country")
     } catch (error) {
-        if (error.code === 11000)
-            throw new Error("El nombre de usuario o email ya existe");
-        throw new Error(error);
+        throw new Error("El nombre de usuario o email ya existe");
     }
 };
 
-const updateUser = async (_, { id, input }, { token }) => {
+const updateUser = async (_:any, { id, input }: { input: UserType, id:string }, { token }: {token:string}) => {
     try {
         const userToken = verifyToken(token);
+        if(typeof userToken === "string") throw new Error("El token no es válido");
         if (userToken.id !== id) verifyAdmin(userToken);
 
         if (!id) throw new Error("No se ha enviado un ID");
@@ -118,8 +126,7 @@ const updateUser = async (_, { id, input }, { token }) => {
         if (!user) throw new Error("No se ha encontrado el Usuario");
         return user;
     } catch (error) {
-        console.log(error);
-        throw new Error(error);
+        throw new Error("El nombre de usuario o email ya existe");
     }
 };
 

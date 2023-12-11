@@ -1,7 +1,24 @@
-import {Schema, model} from 'mongoose'
+import {Schema, model, Model, Document} from 'mongoose'
 import bcrypt from 'bcryptjs'
+import { RoleType } from '../Types/Role';
+export interface IUser extends Document {
+    firstName: string,
+    lastName: string,
+    userName: string,
+    password: string,
+    imgURL: string,
+    email: string,
+    status: string,
+    country: Schema.Types.ObjectId,
+    role: Schema.Types.ObjectId | RoleType | undefined
+}
 
-const userSchema = new Schema({
+interface IUserModel extends Model<IUser> {
+    encryptPassword(password: string): string;
+    comparePassword(password: string, receivedPassword: string): boolean;
+}
+
+const userSchema = new Schema<IUser>({
     firstName: {
         type: String
     },
@@ -54,4 +71,4 @@ userSchema.statics.comparePassword = async (password, receivedPassword) => {
 }
 
 
-export default model('User', userSchema);
+export default model<IUser, IUserModel>('User', userSchema);

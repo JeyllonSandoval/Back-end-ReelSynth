@@ -15,22 +15,29 @@ const oAuth2Client = new google.auth.OAuth2(
 
 oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
 
-const createTrans = async () =>
-    nodemailer.createTransport({
-        service: "gmail",
-        auth: {
-            type: "OAuth2",
-            user: "josewx324@gmail.com",
-            clientId: CLIENT_ID,
-            clientSecret: CLIENT_SECRET,
-            refreshToken: REFRESH_TOKEN,
-            accessToken: await oAuth2Client.getAccessToken(),
-        },
-    });
+  const options = {
+    service: "gmail", 
+    auth: {
+        type: "OAuth2",
+        user: "josewx324@gmail.com",
+        clientId: CLIENT_ID,
+        clientSecret: CLIENT_SECRET,
+        refreshToken: REFRESH_TOKEN,
+        accessToken: await oAuth2Client.getAccessToken()
+      }
+  }
+// @ts-ignore
+const createTrans = async () => nodemailer.createTransport(options);
 
-const sendEmail = async ({ to, subject, html }) => {
-    const transporter = await createTrans();
+interface sendEmailsProps {
+    to: string | string[],
+    subject: string,
+    html: string
+}
 
+const sendEmail = async ({to, subject, html}: sendEmailsProps) => {
+    const transporter = await createTrans()
+    
     const configEmail = {
         from: '"ReelSynth" <noreply@ReelSynth.info>',
         to,

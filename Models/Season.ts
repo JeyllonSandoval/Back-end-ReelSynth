@@ -30,10 +30,6 @@ const seasonSchema = new Schema({
         type: Number,
         default: 0
       },
-    commentCount: {
-        type: Number,
-        default: 0
-    },
     rateCount: {
         type: Number,
         default: 0
