@@ -2,14 +2,31 @@ import Company from "../Models/Company.js"
 import { verifyToken } from "../utils/Token.js"
 import { verifyAdmin } from "../utils/auth.js"
 import { filter } from "../helpers/Filter.js"
+
+import { ContextInput } from "../Types/Context"
+
+interface Company {
+    name: string,
+    description: string,
+    url: string,
+    status: string,
+    entityType: string,
+    entityID: string,
+    host: string
+}
+
+interface CompanyInput {
+    id: string,
+    input: Company,
+}
 // Querys
-const getCompanys = async (_, { input }) => {
+const getCompanys = async (_:any, { input }:CompanyInput) => {
     const query = filter(input)
     const companys = await Company.find(query)
     return companys
 }
 
-const getCompany = async (_, { id }) => { 
+const getCompany = async (_:any, { id }: CompanyInput) => { 
     if(!id) throw new Error("No se ha enviado un ID")
     const company = await Company.findById(id)
     if(!Company) throw new Error("No se ha encontrado la Company")
@@ -18,22 +35,24 @@ const getCompany = async (_, { id }) => {
 
 
 // Mutations
-const createCompany = async (_, { input }, {token}) => {
+const createCompany = async (_:any, { input }:CompanyInput, {token}:ContextInput) => {
     try {
         const userToken = verifyToken(token)
+        if(typeof userToken === "string") throw new Error(userToken)
         verifyAdmin(userToken) 
         const newCompany = new Company(input) 
         await newCompany.save()
         return newCompany
     } catch (error) {
-        throw new Error("Error al crear la Company: "+error.message || error)
+        throw new Error("Error al crear la Company: "+ error)
     }
 }
 
-const updateCompany = async (_, { id,input}, {token}) => {
+const updateCompany = async (_:any, { id,input}:CompanyInput, {token}:ContextInput) => {
     try {
         //console.log(id, input)
         const userToken = verifyToken(token)
+        if(typeof userToken === "string") throw new Error(userToken)
         verifyAdmin(userToken) 
         if(!id) throw new Error("No se ha enviado un ID")
         const company = await Company.findByIdAndUpdate(id, input, {new: true})
@@ -41,7 +60,7 @@ const updateCompany = async (_, { id,input}, {token}) => {
         return company
     } catch (error) {
         console.log(error)
-        throw new Error("Error al actualizar la Company: "+error.message || error)
+        throw new Error("Error al actualizar la Company: "+ error)
     }
 }
 

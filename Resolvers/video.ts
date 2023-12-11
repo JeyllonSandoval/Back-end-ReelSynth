@@ -6,9 +6,24 @@ import { verifyAdmin } from "../utils/auth.js"
 import { verifyToken } from "../utils/Token.js"
 import { getModel } from "../helpers/models.js"
 import Host from "../Models/Host.js"
+import { ContextInput } from "../Types/Context.js"
 
+interface VideoInput {
+    name: string,
+    description: string,
+    url: string,
+    status: string,
+    entityType: string,
+    entityID: string,
+    host: string
+}
+
+interface Video {
+    id: string,
+    input: VideoInput,
+}
 // Querys
-const getVideos = async (_, { input }) => {
+const getVideos = async (_:any, { input }: Video) => {
     const query = filter(input)
     const videos = await Video.find(query).populate({
         path: 'entityID'
@@ -24,7 +39,7 @@ const getVideos = async (_, { input }) => {
   
 
   
-const getVideo = async (_, { id }) => { 
+const getVideo = async (_:any, { id }: Video) => { 
 
     const video = await Video.findById(id).populate({
       path: 'entityID'
@@ -43,15 +58,16 @@ const getVideo = async (_, { id }) => {
 
 
 // Mutations
-const createVideo = async (_, { input }, { token }) => {
+const createVideo = async (_:any, { input }:Video, { token }: ContextInput) => {
     try {
         if(!input) throw new Error("No se ha enviado el input")
         const userToken = verifyToken(token)
+        if(typeof userToken === 'string') throw new Error("No se ha enviado el token")
         verifyAdmin(userToken)
-        const newVideo = new Video({...input, user: userToken.id})
+        const newVideo: any = new Video({...input, user: userToken.id})
         await newVideo.save()
 
-        newVideo.entityID = await getModel(newVideo.entityType).findById(newVideo.entityID)
+        newVideo.entityID = await (getModel(newVideo.entityType) as any).findById(newVideo.entityID)
         newVideo.user = await User.findById(newVideo.user).populate({
             path: 'role country'
         })
@@ -62,20 +78,22 @@ const createVideo = async (_, { input }, { token }) => {
         
     } catch (error) {
         console.log(error)
-        throw new Error("Error al crear el Video: "+error.message || error)
+        throw new Error("Error al crear el Video: "+ error)
     }
 }
 
-const updateVideo = async (_, { id, input }, { token }) =>{
+const updateVideo = async (_:any, { id, input }: Video, { token }: ContextInput) =>{
     // genera este codigo
     const userToken = verifyToken(token);
+    if (typeof userToken === "string")
+        throw new Error("El token no es válido");
     verifyAdmin(userToken);
 
-    const video = await Video.findByIdAndUpdate(id, input, {new: true});
+    const video: any = await Video.findByIdAndUpdate(id, input, {new: true});
     if(!video) throw new Error("No se encontro el video")
 
 
-    const entity = await getModel(video.entityType).findById(video.entityID);
+    const entity = await (getModel(video.entityType) as any).findById(video.entityID);
 
     video.entityID = entity
 
@@ -89,9 +107,10 @@ const updateVideo = async (_, { id, input }, { token }) =>{
 
 }
 
-const deleteVideo = async (_, { id }, { token }) => {
+const deleteVideo = async (_:any, { id }:Video, { token }:ContextInput) => {
     try {
         const userToken = verifyToken(token)
+        if(typeof userToken === 'string') throw new Error("No se ha enviado el token")
         verifyAdmin(userToken)
         const video = await Video.findByIdAndDelete(id).populate({
             path: 'entityID'
@@ -106,7 +125,7 @@ const deleteVideo = async (_, { id }, { token }) => {
         return video
     } catch (error) {
         console.log(error)
-        throw new Error("Error al actualizar el Video: "+error.message || error)
+        throw new Error("Error al actualizar el Video: "+ error)
     }
 }
 

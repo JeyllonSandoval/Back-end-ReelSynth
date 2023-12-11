@@ -4,24 +4,31 @@ import { filter } from "../helpers/Filter.js"
 import { verifyAdmin } from "../utils/auth.js"
 import { verifyToken } from "../utils/Token.js"
 import { getModel } from "../helpers/models.js"
+import { ContextInput } from "../Types/Context.js"
+import { CommentType } from "../Types/Comment.js"
 
+interface CommentInput {
+    id: string,
+    entityID: string,
+    input: CommentType,
+}
 
-const updateCounter = async (comment) => {
+const updateCounter = async (comment: CommentType) => {
     const { entityID, entityType, status } = comment;
   
     try {
-      const entity = await getModel(entityType).findByIdAndUpdate(entityID, {
+      const entity = (await getModel(entityType)as any).findByIdAndUpdate(entityID, {
         $inc: {
           commentCount: status !== 'DELETED' ? 1 : -1,
         },
       }, { new: true });
       return entity
     } catch (error) {
-      console.error('Error updating comment count:', error.message || error);
+      console.error('Error updating comment count:', error);
     }
   };
 // Querys
-const getComments = async (_, { input }) => {
+const getComments = async (_:any, { input }: CommentInput) => {
     console.log(input)
     const query = filter(input)
     const comment = await Comment.find(query).populate({
@@ -42,8 +49,9 @@ const getComments = async (_, { input }) => {
     return comment
   }
   
-const getComment = async (_, { entityID }, { token }) => { 
+const getComment = async (_:any, { entityID }: CommentInput, { token }: ContextInput) => { 
     const userToken = verifyToken(token)
+    if(typeof userToken === "string") throw new Error(userToken)
     const comment = await Comment.findOne({user: userToken.id, entityID}).populate({
       path: 'entityID'
   }).populate({
@@ -65,15 +73,18 @@ const getComment = async (_, { entityID }, { token }) => {
 
 
 // Mutations
-const createComment = async (_, { input }, { token }) => {
+const createComment = async (_:any, { input }:CommentInput, { token }: ContextInput) => {
     try {
         if(!input) throw new Error("No se ha enviado el input")
         const userToken = verifyToken(token)
-        const newComment = new Comment({...input, user: userToken.id})
+        if(typeof userToken === "string") throw new Error(userToken)
+        const newComment: any = new Comment({...input, user: userToken.id})
         await newComment.save()
 
       if(newComment.parent){
           const parent = await Comment.findById(newComment.parent)
+
+          if(!parent) throw new Error("No se encontro el parent")
 
           parent.commentCount += 1;
 
@@ -86,7 +97,7 @@ const createComment = async (_, { input }, { token }) => {
             }
           })
       }
-        newComment.entityID = await getModel(newComment.entityType).findById(newComment.entityID)
+        newComment.entityID = await (getModel(newComment.entityType) as any).findById(newComment.entityID)
         newComment.user = await User.findById(newComment.user).populate({
             path: 'role country'
         })
@@ -97,18 +108,19 @@ const createComment = async (_, { input }, { token }) => {
         
     } catch (error) {
         console.log(error)
-        throw new Error("Error al crear el Comment: "+error.message || error)
+        throw new Error("Error al crear el Comment: "+error)
     }
 }
 
-const updateComment = async (_, {id, input }, { token }) => {
+const updateComment = async (_:any, {id, input }:CommentInput, { token }: ContextInput) => {
       // genera este codigo
       const userToken = verifyToken(token)
+      if(typeof userToken === "string") throw new Error(userToken)
       const comment = await Comment.findById(id);
   
       if(!comment) throw new Error("No se encontro el comment")
   
-      if (comment.user.toString() !== userToken.id && !verifyAdmin(userToken)) {
+      if (comment?.user?.toString() !== userToken.id && !verifyAdmin(userToken)) {
         throw new Error("No tienes permisos para actualizar este Comment");
       }
       

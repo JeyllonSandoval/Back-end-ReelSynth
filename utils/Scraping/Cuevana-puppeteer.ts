@@ -1,9 +1,7 @@
 import puppeteer from "puppeteer";
 
-const CuevanaScrapingPuppeteer = async (url) => {
-    const browser = await puppeteer.launch({
-        headless: 'new'
-    });
+const CuevanaScrapingPuppeteer = async (url: string) => {
+    const browser = await puppeteer.launch();
     const page = await browser.newPage();
 
     await page.goto(url, { waitUntil: "domcontentloaded" });
@@ -21,15 +19,15 @@ const CuevanaScrapingPuppeteer = async (url) => {
             "0"
     );
     const image = await page.$eval(".Image figure .lazy", (element) => {
-        const imgElement = element;
+        const imgElement = element as HTMLImageElement;
         return imgElement.src;
     });
     const videoUrl = await page.$eval(".load-video iframe", (element) => {
-        const iframeElement = element;
+        const iframeElement = element as HTMLIFrameElement;
         return iframeElement.src;
     });
     const video = await page.$eval(".load-video iframe", (element) => {
-        const iframeElement = element;
+        const iframeElement = element as HTMLIFrameElement;
         return iframeElement.outerHTML;
     });
     const videoWithSrc = video.replace('src="', `src="${videoUrl}`);

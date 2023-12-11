@@ -1,4 +1,4 @@
-import { MONGO_URL } from "./config.js";
+import { MONGO_URL } from "./config";
 import { connect } from "mongoose";
 
 
