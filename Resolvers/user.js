@@ -1,125 +1,138 @@
-import { filter } from "../helpers/Filter.js"
-import User from "../Models/User.js"
-import { createToken, verifyToken } from "../utils/Token.js"
-import { verifyAdmin } from "../utils/auth.js"
-import Role from "../Models/Role.js"
-import sendEmail from "../emailer.js"
-import { htmlWelcome } from "../Mail/index.js"
+import { filter } from "../helpers/Filter.js";
+import User from "../Models/User.js";
+import { createToken, verifyToken } from "../utils/Token.js";
+import { verifyAdmin } from "../utils/auth.js";
+import Role from "../Models/Role.js";
+import sendEmail from "../emailer.js";
+import { htmlWelcome } from "../Mail/index.js";
+import { PUBLIC_USER } from "../config.js";
 // Querys
 const getUsers = async (_, { input }) => {
-    const query = filter(input)
-    const Users = await User.find(query).populate("role").populate("country")
+    const query = filter(input);
+    const Users = await User.find(query).populate("role").populate("country");
 
-    return Users
-  }
-  
-const getUser = async (_, {id}) => { 
-    if(!id) throw new Error("No se ha enviado un ID")
-    const user = await User.findById(id).populate("role").populate("country")
+    return Users;
+};
 
-    if(!user) throw new Error("No se ha encontrado el Usuario")
-    return user 
-  }
+const getUser = async (_, { id }) => {
+    if (!id) throw new Error("No se ha enviado un ID");
+    const user = await User.findById(id).populate("role").populate("country");
 
-  const getUserByToken = async (_, {token}) => { 
+    if (!user) throw new Error("No se ha encontrado el Usuario");
+    return user;
+};
 
-    if(!token) throw new Error("No se ha enviado un Token")
-    const userToken = verifyToken(token)
-    const user = await User.findById(userToken.id).populate("role").populate("country")
+const getUserByToken = async (_, { token }) => {
+    if (!token) throw new Error("No se ha enviado un Token");
+    const userToken = verifyToken(token);
+    const user = await User.findById(userToken.id)
+        .populate("role")
+        .populate("country");
 
-    if(!user) throw new Error("No se ha encontrado el Usuario")
-    return user 
-  }
+    if (!user) throw new Error("No se ha encontrado el Usuario");
+    return user;
+};
 
-const login = async (_, {input}) => { 
+const login = async (_, { input }) => {
     console.log(input);
-    const {userName, password, email} = input
-    if(!userName && !email) throw new Error("No se ha enviado un nombre de usuario o email")
-    if(!password) throw new Error("No se ha enviado una contraseña")
+    const { userName, password, email } = input;
+    if (!userName && !email)
+        throw new Error("No se ha enviado un nombre de usuario o email");
+    if (!password) throw new Error("No se ha enviado una contraseña");
 
-    const userFound = await User.findOne({ $or: [{ userName: userName }, { email: email }] }).populate('role')
-    if(!userFound) throw new Error("Usuario/Email o contraseña incorrectos")
-    
-    const matchPassword = await User.comparePassword(password, userFound.password)
-    if(!matchPassword) throw new Error("Usuario/Email o contraseña incorrectos")
+    const userFound = await User.findOne({
+        $or: [{ userName: userName }, { email: email }],
+    }).populate("role");
+    if (!userFound) throw new Error("Usuario/Email o contraseña incorrectos");
 
-    const token = createToken(userFound)
-    return { token }
-}
+    const matchPassword = await User.comparePassword(
+        password,
+        userFound.password
+    );
+    if (!matchPassword)
+        throw new Error("Usuario/Email o contraseña incorrectos");
 
-const signup = async (_, {input}) => {
-    const {userName, password, email} = input
-    if(!userName && !email) throw new Error("No se ha enviado un nombre de usuario o email")
-    if(!password) throw new Error("No se ha enviado una contraseña")
+    const token = createToken(userFound);
+    return { token };
+};
 
-    const userFound = await User.findOne({ $or: [{ userName: userName }, { email: email }] })
-    if(userFound) throw new Error("Usuario/Email ya existe")
-    const publicRole = await Role.findOne({name: "Public"})
-    const newUser = new User(input)
-    newUser.password = await User.encryptPassword(password)
-    newUser.role = publicRole.id
-    await newUser.save()
-    newUser.role = publicRole
-    const token = createToken(newUser)
+const signup = async (_, { input }) => {
+    const { userName, password, email } = input;
+    if (!userName && !email)
+        throw new Error("No se ha enviado un nombre de usuario o email");
+    if (!password) throw new Error("No se ha enviado una contraseña");
 
-    const html = htmlWelcome({userName: newUser.userName})
+    const userFound = await User.findOne({
+        $or: [{ userName: userName }, { email: email }],
+    });
+    if (userFound) throw new Error("Usuario/Email ya existe");
+    const publicRole = await Role.findOne({ name: PUBLIC_USER });
+    const newUser = new User(input);
+    newUser.password = await User.encryptPassword(password);
+    newUser.role = publicRole.id;
+    await newUser.save();
+    newUser.role = publicRole;
+    const token = createToken(newUser);
+
+    const html = htmlWelcome({ userName: newUser.userName });
 
     sendEmail({
-        to: newUser.email, 
-        subject: "Bienvenido a ReelSynth", 
-        html
-    })
+        to: newUser.email,
+        subject: "Bienvenido a ReelSynth",
+        html,
+    });
 
-    return { token }
-}
+    return { token };
+};
 
-
-const createUser = async (_, { input }, {token}) => {
+const createUser = async (_, { input }, { token }) => {
     try {
-        const userToken = verifyToken(token)
-        verifyAdmin(userToken) 
+        const userToken = verifyToken(token);
+        verifyAdmin(userToken);
         console.log(userToken);
-        if(!input.userName || !input.password || !input.email || !input.role) 
+        if (!input.userName || !input.password || !input.email || !input.role)
             throw new Error("No se ha enviado todos los datos");
 
-        input.password = await User.encryptPassword(input.password)
-        const newUser = new User(input)
-        await newUser.save()
-        return await newUser.populate("role").populate("country")
+        input.password = await User.encryptPassword(input.password);
+        const newUser = new User(input);
+        await newUser.save();
+        return await newUser.populate("role").populate("country");
     } catch (error) {
-        if(error.code === 11000) throw new Error("El nombre de usuario o email ya existe")
-        throw new Error(error)
+        if (error.code === 11000)
+            throw new Error("El nombre de usuario o email ya existe");
+        throw new Error(error);
     }
-    
-}
+};
 
-const updateUser = async (_, { id, input }, {token}) => {
-    try{
-        const userToken = verifyToken(token)
-        if(userToken.id !== id) verifyAdmin(userToken);
-        
-        if(!id) throw new Error("No se ha enviado un ID")
-        if(input.password) input.password = await User.encryptPassword(input.password)
-        const user = await User.findByIdAndUpdate(id, input, {new: true}).populate("role country")
-        if(!user) throw new Error("No se ha encontrado el Usuario")
-        return user
-    }catch(error){
-        console.log(error)
-        throw new Error(error)
+const updateUser = async (_, { id, input }, { token }) => {
+    try {
+        const userToken = verifyToken(token);
+        if (userToken.id !== id) verifyAdmin(userToken);
+
+        if (!id) throw new Error("No se ha enviado un ID");
+        if (input.password)
+            input.password = await User.encryptPassword(input.password);
+        const user = await User.findByIdAndUpdate(id, input, {
+            new: true,
+        }).populate("role country");
+        if (!user) throw new Error("No se ha encontrado el Usuario");
+        return user;
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
     }
-}
-
+};
 
 export const userResolvers = {
     Query: {
         getUsers,
         getUser,
-        getUserByToken
+        getUserByToken,
     },
     Mutation: {
         createUser,
         updateUser,
         login,
-        signup
-    }
-}
+        signup,
+    },
+};
