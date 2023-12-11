@@ -78,7 +78,7 @@ const signup = async (_: any, { input }: { input: UserType }) => {
     const user = await newUser.save();
     if (!user) throw new Error("No se ha podido crear el usuario");
 
-    const populatedUser : UserType = await user.populate("role");
+    const populatedUser: UserType = await user.populate("role");
 
     const token = createToken(populatedUser);
 
@@ -93,10 +93,15 @@ const signup = async (_: any, { input }: { input: UserType }) => {
     return { token };
 };
 
-const createUser = async (_: any, { input }: { input: UserType }, { token }: {token:string}) => {
+const createUser = async (
+    _: any,
+    { input }: { input: UserType },
+    { token }: { token: string }
+) => {
     try {
         const userToken = verifyToken(token);
-        if(typeof userToken === "string") throw new Error("El token no es válido");
+        if (typeof userToken === "string")
+            throw new Error("El token no es válido");
         verifyAdmin(userToken);
         console.log(userToken);
         if (!input.userName || !input.password || !input.email || !input.role)
@@ -105,16 +110,21 @@ const createUser = async (_: any, { input }: { input: UserType }, { token }: {to
         input.password = await User.encryptPassword(input.password);
         const newUser = new User(input);
         await newUser.save();
-        return await newUser.populate("role country")
+        return await newUser.populate("role country");
     } catch (error) {
         throw new Error("El nombre de usuario o email ya existe");
     }
 };
 
-const updateUser = async (_:any, { id, input }: { input: UserType, id:string }, { token }: {token:string}) => {
+const updateUser = async (
+    _: any,
+    { id, input }: { input: UserType; id: string },
+    { token }: { token: string }
+) => {
     try {
         const userToken = verifyToken(token);
-        if(typeof userToken === "string") throw new Error("El token no es válido");
+        if (typeof userToken === "string")
+            throw new Error("El token no es válido");
         if (userToken.id !== id) verifyAdmin(userToken);
 
         if (!id) throw new Error("No se ha enviado un ID");

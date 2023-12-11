@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js --watch index.js",
+    "dev": "ts-node-dev ./src/index.ts",
     "start": "node index.js"
   },
   "keywords": [],
@@ -25,14 +24,15 @@
     "mongoose": "7.6.3",
     "morgan": "1.10.0",
     "nodemailer": "^6.9.7",
-    "puppeteer": "21.6.0",
-    "typescript": "5.3.3"
+    "puppeteer": "21.6.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "2.4.6",
     "@types/jsonwebtoken": "9.0.5",
     "@types/morgan": "1.9.9",
     "@types/nodemailer": "6.4.14",
-    "nodemon": "3.0.1"
+    "nodemon": "3.0.1",
+    "ts-node-dev": "2.0.0",
+    "typescript": "5.3.3"
   }
 }

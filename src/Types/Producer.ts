@@ -1,6 +1,6 @@
 
 export type ProducerType = {
-    _id: string;
+    id: string;
     name: string;
     description: string;
     imgURL: string;

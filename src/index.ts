@@ -4,8 +4,9 @@ import { PORT } from "./config";
 import typeDefs from "./Schemas/index";
 import resolvers from "./Resolvers/index";
 import CuevanaScrapingPuppeteer from "./utils/Scraping/Cuevana-puppeteer";
-import morgan from "morgan"
+import morgan from "morgan";
 import { connectDB } from "./db";
+
 const app = express();
 
 app.use(express.json());
@@ -25,21 +26,23 @@ app.get("/movie", async (req, res) => {
 const svrApollo = new ApolloServer({
     typeDefs,
     resolvers,
-    context: ({ req }) => {
+    context: ({ req }: { req: any }) => {
         const token = req.headers["x-token"] || "";
         return { req, token };
     },
 });
 
-await svrApollo.start();
+async function start() {
+    await svrApollo.start();
+    await svrApollo.applyMiddleware({ app });
+    connectDB();
 
-await svrApollo.applyMiddleware({ app });
-
-connectDB();
+    app.listen(PORT, () => {
+        console.log(`Servidor iniciado en el puerto ${PORT}`);
+        console.log(`http://localhost:${PORT}`);
+        console.log(`http://localhost:${PORT}/graphql`);
+    });
+}
 
 // Inicia el servidor
-app.listen(PORT, () => {
-    console.log(`Servidor iniciado en el puerto ${PORT}`);
-    console.log(`http://localhost:${PORT}`);
-    console.log(`http://localhost:${PORT}/graphql`);
-});
+start();

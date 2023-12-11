@@ -3,7 +3,7 @@ import { filter } from "../helpers/Filter";
 import { verifyAdmin } from "../utils/auth";
 import { verifyToken } from "../utils/Token";
 import { ContextInput } from "../Types/Context";
-import { CountryType } from "../Types/Country.js";
+import { CountryType } from "../Types/Country";
 
 interface CountryInput {
     id: string;
