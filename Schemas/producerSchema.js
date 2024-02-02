@@ -1,3 +1,6 @@
+import { gql } from "apollo-server";
+
+export default gql`
 
 type Producer {
     id: ID!
@@ -24,3 +27,6 @@ type Mutation {
     updateProducer(id: ID!, input: inputProducer): Producer
     deleteProducer(id: ID!): Producer
 }
+
+`;
+

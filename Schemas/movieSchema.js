@@ -1,3 +1,6 @@
+import { gql } from "apollo-server";
+
+export default gql`
 
 type Movie {
     id: ID!
@@ -43,3 +46,6 @@ type Mutation {
     updateMovie(id: ID!, input: inputMovie): Movie
     deleteMovie(id: ID!): Movie
 }
+
+`;
+

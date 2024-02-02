@@ -1,5 +1,7 @@
+import { gql } from "apollo-server";
 
-type Comment {
+export default gql`
+    type Comment {
     id: ID!
     content: String!
     entityType: String!
@@ -30,4 +32,4 @@ type Mutation {
     createComment(input: inputComment): Comment
     updateComment(id: ID!, input: inputComment): Comment
     deleteComment(id: ID!): Comment
-}
+}`;

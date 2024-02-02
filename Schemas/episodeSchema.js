@@ -1,3 +1,6 @@
+import { gql } from "apollo-server";
+
+export default gql`
 
 type Episode {
     id: ID!
@@ -36,3 +39,6 @@ type Mutation {
     updateEpisode(id: ID!, input: inputEpisode): Episode
     deleteEpisode(id: ID!): Episode
 }
+
+`;
+

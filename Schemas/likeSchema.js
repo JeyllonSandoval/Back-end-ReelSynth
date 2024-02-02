@@ -1,3 +1,6 @@
+import { gql } from "apollo-server";
+
+export default gql`
 
 type entityID {
     id: ID
@@ -49,3 +52,6 @@ type Mutation {
     createLike(input: inputLike): Like
     deleteLike(entityID: ID!): Like
 }
+
+
+`;

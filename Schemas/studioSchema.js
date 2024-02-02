@@ -1,3 +1,6 @@
+import { gql } from "apollo-server";
+
+export default gql`
 
 type Studio {
     id: ID!
@@ -26,3 +29,6 @@ type Mutation {
     updateStudio(id: ID!, input: inputStudio): Studio
     deleteStudio(id: ID!): Studio
 }
+
+
+`;

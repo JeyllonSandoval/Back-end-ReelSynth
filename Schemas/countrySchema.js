@@ -1,3 +1,6 @@
+import { gql } from "apollo-server";
+
+export default gql`
 
 type Country{
     id: ID!
@@ -22,3 +25,6 @@ type Mutation{
     updateCountry(id: ID!, input: CountryInput): Country
     deleteCountry(id: ID!): Country
 }
+
+`;
+

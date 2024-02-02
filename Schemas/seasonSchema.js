@@ -1,3 +1,6 @@
+import { gql } from "apollo-server";
+
+export default gql`
 
 type Season {
     id: ID!
@@ -28,3 +31,6 @@ type Mutation {
     updateSeason(id: ID!, input: inputSeason): Season
     deleteSeason(id: ID!): Season
 }
+
+`;
+

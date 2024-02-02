@@ -1,3 +1,6 @@
+import { gql } from "apollo-server";
+
+export default gql`
 
 type Genrer {
     id: ID!
@@ -22,3 +25,6 @@ type Mutation {
     updateGenrer(id: ID!, input: inputGenrer): Genrer
     deleteGenrer(id: ID!): Genrer
 }
+
+`;
+

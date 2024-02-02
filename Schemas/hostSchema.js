@@ -1,3 +1,6 @@
+import { gql } from "apollo-server";
+
+export default gql`
 
 type Host {
     id: ID!
@@ -22,3 +25,6 @@ type Mutation {
     updateHost(id: ID!, input: inputHost): Host
     deleteHost(id: ID!): Host
 }
+
+`;
+

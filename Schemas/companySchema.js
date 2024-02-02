@@ -1,3 +1,7 @@
+import { gql } from "apollo-server";
+
+export default gql`
+
 type Company {
     id: ID!
     imgURL: String
@@ -23,3 +27,6 @@ type Mutation {
     updateCompany(id: ID!, input: inputCompany): Company
     deleteCompany(id: ID!): Company
 }
+
+`;
+

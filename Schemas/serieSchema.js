@@ -1,3 +1,6 @@
+import { gql } from "apollo-server";
+
+export default gql`
 
 type Serie {
     id: ID!
@@ -40,3 +43,6 @@ type Mutation {
     updateSerie(id: ID!, input: inputSerie): Serie
     deleteSerie(id: ID!): Serie
 }
+
+`;
+

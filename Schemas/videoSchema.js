@@ -1,3 +1,6 @@
+import { gql } from "apollo-server";
+
+export default gql`
 
 type Video {
     id: ID!
@@ -29,3 +32,6 @@ type Mutation {
     updateVideo(id: ID!, input: inputVideo!): Video
     deleteVideo(id: ID!): Video
 }
+
+`;
+

@@ -1,3 +1,6 @@
+import { gql } from "apollo-server";
+
+export default gql`
 
 type Rate {
     id: ID!
@@ -26,3 +29,6 @@ type Mutation {
     updateRate(entityID: ID!, rate: Float): Rate
     deleteRate(entityID: ID!): Rate
 }
+
+
+`;
